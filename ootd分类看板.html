@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第二阶段 OOTD 图片分类看板</title>
+  <style>
+    :root {
+      --ink: #172026;
+      --muted: #66717a;
+      --line: #dde4e8;
+      --paper: #fbfcfd;
+      --panel: #ffffff;
+      --red: #b52230;
+      --green: #126b55;
+      --blue: #234b8f;
+      --gold: #d6a84d;
+      --shadow: 0 12px 32px rgba(22, 32, 38, .10);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(245, 247, 249, .96), rgba(251, 252, 253, 1) 380px),
+        var(--paper);
+      font-family: "Microsoft YaHei", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      padding: 36px clamp(18px, 4vw, 56px) 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .subhead {
+      max-width: 860px;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    main {
+      padding: 22px clamp(18px, 4vw, 56px) 56px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      min-height: 92px;
+      padding: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(22, 32, 38, .05);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .controls {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      margin: 0 -12px 24px;
+      background: rgba(251, 252, 253, .9);
+      border-bottom: 1px solid rgba(221, 228, 232, .8);
+      backdrop-filter: blur(10px);
+    }
+
+    .search {
+      width: 100%;
+      height: 42px;
+      padding: 0 14px;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font: inherit;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(35, 75, 143, .14);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      height: 36px;
+      padding: 0 12px;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .chip.active {
+      color: #fff;
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .section {
+      margin: 0 0 34px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 0 12px;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    .section-meta {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .gallery {
+      column-count: 5;
+      column-gap: 14px;
+    }
+
+    .card {
+      display: inline-block;
+      width: 100%;
+      margin: 0 0 14px;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(22, 32, 38, .06);
+      break-inside: avoid;
+      cursor: zoom-in;
+    }
+
+    .card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #eef2f4;
+    }
+
+    .caption {
+      display: grid;
+      gap: 5px;
+      padding: 10px 12px 12px;
+      font-size: 12px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      padding: 3px 7px;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 11px;
+    }
+
+    .tag.team-us { background: var(--blue); }
+    .tag.team-red { background: var(--red); }
+    .tag.team-redgreen { background: var(--green); }
+    .tag.scene { background: #5d6670; }
+
+    .file {
+      color: var(--muted);
+      overflow-wrap: anywhere;
+      line-height: 1.45;
+    }
+
+    .empty {
+      display: none;
+      padding: 42px 18px;
+      color: var(--muted);
+      text-align: center;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(10, 14, 18, .84);
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox img {
+      max-width: min(1100px, 94vw);
+      max-height: 84vh;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .lightbox-info {
+      position: fixed;
+      left: 24px;
+      right: 24px;
+      bottom: 18px;
+      color: #fff;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .close {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      width: 42px;
+      height: 42px;
+      color: #fff;
+      background: rgba(255, 255, 255, .16);
+      border: 1px solid rgba(255, 255, 255, .32);
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    @media (max-width: 1280px) {
+      .gallery { column-count: 4; }
+    }
+
+    @media (max-width: 940px) {
+      .stats { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+      .controls { grid-template-columns: 1fr; position: static; }
+      .gallery { column-count: 3; }
+    }
+
+    @media (max-width: 640px) {
+      header { padding-top: 26px; }
+      .stats { grid-template-columns: 1fr; }
+      .gallery { column-count: 2; column-gap: 10px; }
+      .card { margin-bottom: 10px; }
+      .section-head { display: block; }
+      .section-meta { margin-top: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">世界杯广告投流 / 第二阶段 OOTD</p>
+    <h1>图片分类看板</h1>
+    <p class="subhead">按队款与穿搭场景整理图片资产，便于快速浏览、筛选和检查素材覆盖情况。</p>
+  </header>
+
+  <main>
+    <section class="stats" aria-label="统计总览">
+      <div class="stat"><strong id="totalCount">0</strong><span>图片总数</span></div>
+      <div class="stat"><strong id="teamCount">0</strong><span>队款 / 批次分类</span></div>
+      <div class="stat"><strong id="sceneCount">0</strong><span>场景 / 修改分类</span></div>
+      <div class="stat"><strong id="visibleCount">0</strong><span>当前显示</span></div>
+    </section>
+
+    <section class="controls" aria-label="筛选工具">
+      <input class="search" id="search" type="search" placeholder="搜索文件名、队款或场景">
+      <div class="chips" id="teamFilters" aria-label="队款筛选"></div>
+      <div class="chips" id="sceneFilters" aria-label="场景筛选"></div>
+    </section>
+
+    <div id="sections"></div>
+    <div class="empty" id="empty">没有匹配的图片</div>
+  </main>
+
+  <aside class="lightbox" id="lightbox" aria-modal="true" role="dialog">
+    <button class="close" id="close" aria-label="关闭">×</button>
+    <img id="lightboxImage" alt="">
+    <div class="lightbox-info" id="lightboxInfo"></div>
+  </aside>
+
+  <script>
+    const groups = [
+      {
+        team: "美国队款",
+        scene: "日常穿搭",
+        files: [
+          "ChatGPT Image 2026年5月11日 12_05_25.png",
+          "ChatGPT Image 2026年5月11日 12_07_22.png",
+          "ChatGPT Image 2026年5月8日 21_26_23.png",
+          "ChatGPT Image 2026年5月8日 21_31_22.png",
+          "ChatGPT Image 2026年5月8日 21_40_14.png",
+          "ChatGPT Image 2026年5月8日 21_42_55.png",
+          "ChatGPT Image 2026年5月8日 21_46_21.png",
+          "ChatGPT Image 2026年5月9日 18_03_27.png",
+          "ChatGPT Image 2026年5月9日 18_03_33.png",
+          "ChatGPT Image 2026年5月9日 18_03_36.png",
+          "ChatGPT Image 2026年5月9日 18_03_40.png",
+          "ChatGPT Image 2026年5月9日 20_56_27.png",
+          "ChatGPT Image 2026年5月9日 21_11_55.png"
+        ]
+      },
+      {
+        team: "美国队款",
+        scene: "球迷身份",
+        files: [
+          "20260509-221211.png",
+          "20260511-102836.png",
+          "20260511-102843.png",
+          "ChatGPT Image 2026年5月9日 21_52_42.png"
+        ]
+      },
+      {
+        team: "美国队款",
+        scene: "精致穿搭",
+        files: [
+          "ChatGPT Image 2026年5月11日 10_59_01.png",
+          "ChatGPT Image 2026年5月11日 11_00_59.png",
+          "ChatGPT Image 2026年5月11日 11_03_15.png",
+          "ChatGPT Image 2026年5月11日 11_05_37.png",
+          "ChatGPT Image 2026年5月11日 11_08_15.png",
+          "ChatGPT Image 2026年5月11日 12_10_33.png",
+          "ChatGPT Image 2026年5月11日 12_12_05.png"
+        ]
+      },
+      {
+        team: "葡萄牙红款",
+        scene: "日常穿搭",
+        files: [
+          "ChatGPT Image 2026年5月11日 10_33_25.png",
+          "ChatGPT Image 2026年5月11日 11_50_45.png",
+          "ChatGPT Image 2026年5月9日 21_40_01.png",
+          "ChatGPT Image 2026年5月9日 21_44_49.png",
+          "ChatGPT Image 2026年5月9日 21_57_59.png"
+        ]
+      },
+      {
+        team: "葡萄牙红款",
+        scene: "球迷身份",
+        files: [
+          "ChatGPT Image 2026年5月8日 22_03_36.png",
+          "ChatGPT Image 2026年5月9日 18_03_07.png",
+          "ChatGPT Image 2026年5月9日 19_53_04.png",
+          "ChatGPT Image 2026年5月9日 19_53_11.png",
+          "ChatGPT Image 2026年5月9日 19_53_19.png",
+          "ChatGPT Image 2026年5月9日 19_53_26.png"
+        ]
+      },
+      {
+        team: "葡萄牙红款",
+        scene: "精致穿搭",
+        files: [
+          "ChatGPT Image 2026年5月11日 10_40_17.png",
+          "ChatGPT Image 2026年5月11日 12_03_02.png",
+          "ChatGPT Image 2026年5月11日 12_07_01.png",
+          "ChatGPT Image 2026年5月9日 18_04_02.png",
+          "ChatGPT Image 2026年5月9日 18_04_06.png",
+          "ChatGPT Image 2026年5月9日 18_16_27.png"
+        ]
+      },
+      {
+        team: "葡萄牙红绿款",
+        scene: "日常穿搭",
+        files: [
+          "ChatGPT Image 2026年5月11日 11_02_16.png",
+          "ChatGPT Image 2026年5月11日 11_04_41.png",
+          "ChatGPT Image 2026年5月11日 11_37_22.png",
+          "ChatGPT Image 2026年5月11日 11_39_05.png",
+          "ChatGPT Image 2026年5月11日 11_50_53.png",
+          "ChatGPT Image 2026年5月11日 11_55_30.png",
+          "ChatGPT Image 2026年5月9日 18_58_13.png",
+          "ChatGPT Image 2026年5月9日 18_58_25.png",
+          "ChatGPT Image 2026年5月9日 19_04_03.png",
+          "ChatGPT Image 2026年5月9日 19_20_33.png"
+        ]
+      },
+      {
+        team: "葡萄牙红绿款",
+        scene: "球迷身份",
+        files: [
+          "ChatGPT Image 2026年5月8日 21_26_36.png",
+          "ChatGPT Image 2026年5月8日 21_38_21.png",
+          "ChatGPT Image 2026年5月8日 21_42_12.png",
+          "ChatGPT Image 2026年5月8日 21_49_28.png",
+          "ChatGPT Image 2026年5月8日 22_03_36.png",
+          "ChatGPT Image 2026年5月9日 18_02_37.png",
+          "ChatGPT Image 2026年5月9日 18_02_45.png",
+          "ChatGPT Image 2026年5月9日 18_02_55.png",
+          "ChatGPT Image 2026年5月9日 18_03_02.png",
+          "ChatGPT Image 2026年5月9日 18_03_07.png",
+          "ChatGPT Image 2026年5月9日 19_53_26.png"
+        ]
+      },
+      {
+        team: "葡萄牙红绿款",
+        scene: "精致穿搭",
+        files: [
+          "ChatGPT Image 2026年5月11日 11_14_27.png",
+          "ChatGPT Image 2026年5月11日 11_17_01.png",
+          "ChatGPT Image 2026年5月11日 11_17_55.png",
+          "ChatGPT Image 2026年5月11日 11_21_35.png",
+          "ChatGPT Image 2026年5月11日 11_23_12.png",
+          "ChatGPT Image 2026年5月11日 11_25_04.png",
+          "ChatGPT Image 2026年5月11日 11_25_37.png",
+          "ChatGPT Image 2026年5月11日 11_26_53.png",
+          "ChatGPT Image 2026年5月11日 11_29_29.png",
+          "ChatGPT Image 2026年5月11日 11_29_38.png",
+          "ChatGPT Image 2026年5月11日 11_31_45.png",
+          "ChatGPT Image 2026年5月9日 19_20_45.png",
+          "ChatGPT Image 2026年5月9日 19_20_48.png",
+          "ChatGPT Image 2026年5月9日 19_31_26.png",
+          "ChatGPT Image 2026年5月9日 20_57_59.png"
+        ]
+      },
+      {
+        team: "0512修改",
+        scene: "基础修改",
+        path: "0512修改",
+        files: [
+          "ChatGPT Image 2026年5月12日 11_23_44.png",
+          "ChatGPT Image 2026年5月12日 11_26_30.png",
+          "ChatGPT Image 2026年5月12日 11_48_40.png",
+          "ChatGPT Image 2026年5月12日 11_49_26.png",
+          "ChatGPT Image 2026年5月12日 11_52_06.png",
+          "ChatGPT Image 2026年5月12日 11_52_19.png",
+          "ChatGPT Image 2026年5月12日 11_52_35.png",
+          "ChatGPT Image 2026年5月12日 11_55_52.png"
+        ]
+      },
+      {
+        team: "0512修改",
+        scene: "加7贴纸",
+        path: "0512修改/加7贴纸",
+        files: [
+          "ChatGPT Image 2026年5月12日 12_37_35.png",
+          "ChatGPT Image 2026年5月12日 12_41_13.png",
+          "ChatGPT Image 2026年5月12日 17_22_14.png",
+          "ChatGPT Image 2026年5月12日 17_24_46.png"
+        ]
+      },
+      {
+        team: "0512修改",
+        scene: "加7贴纸 / 红",
+        path: "0512修改/加7贴纸/红",
+        files: [
+          "ChatGPT Image 2026年5月12日 12_40_16.png",
+          "ChatGPT Image 2026年5月12日 12_40_22.png",
+          "ChatGPT Image 2026年5月12日 12_40_32.png",
+          "ChatGPT Image 2026年5月12日 14_07_32.png",
+          "ChatGPT Image 2026年5月12日 17_18_38.png",
+          "ChatGPT Image 2026年5月12日 17_29_45.png"
+        ]
+      },
+      {
+        team: "0512修改",
+        scene: "加7贴纸 / 红绿",
+        path: "0512修改/加7贴纸/红绿",
+        files: [
+          "ChatGPT Image 2026年5月12日 17_45_11.png",
+          "ChatGPT Image 2026年5月12日 17_48_48.png",
+          "ChatGPT Image 2026年5月12日 17_51_48.png",
+          "ChatGPT Image 2026年5月12日 20_39_46.png",
+          "ChatGPT Image 2026年5月12日 20_44_42.png",
+          "ChatGPT Image 2026年5月12日 20_47_52.png",
+          "ChatGPT Image 2026年5月12日 21_04_18.png"
+        ]
+      },
+      {
+        team: "0512修改",
+        scene: "加文案",
+        path: "0512修改/加文案",
+        files: [
+          "ChatGPT Image 2026年5月12日 12_41_13.png",
+          "ChatGPT Image 2026年5月12日 17_24_46.png",
+          "ChatGPT Image 2026年5月12日 17_44_21.png",
+          "ChatGPT Image 2026年5月12日 17_45_55.png",
+          "ChatGPT Image 2026年5月12日 17_46_12.png",
+          "ChatGPT Image 2026年5月12日 17_47_50.png",
+          "ChatGPT Image 2026年5月12日 17_49_40.png",
+          "ChatGPT Image 2026年5月12日 17_51_32.png",
+          "ChatGPT Image 2026年5月12日 17_53_33.png",
+          "ChatGPT Image 2026年5月12日 17_56_08.png",
+          "ChatGPT Image 2026年5月12日 18_02_47.png",
+          "ChatGPT Image 2026年5月12日 20_18_06.png"
+        ]
+      },
+      {
+        team: "0512修改",
+        scene: "更商业更精致 / 葡萄牙红绿",
+        path: "0512修改/更商业更精致/葡萄牙红绿",
+        files: [
+          "ChatGPT Image 2026年5月12日 20_26_49.png",
+          "ChatGPT Image 2026年5月12日 20_40_37.png",
+          "ChatGPT Image 2026年5月12日 20_50_06.png",
+          "ChatGPT Image 2026年5月12日 21_01_57.png",
+          "ChatGPT Image 2026年5月12日 21_11_03.png",
+          "ChatGPT Image 2026年5月12日 21_11_55.png",
+          "ChatGPT Image 2026年5月12日 21_14_48.png",
+          "ChatGPT Image 2026年5月12日 21_18_32.png",
+          "ChatGPT Image 2026年5月12日 21_22_40.png"
+        ]
+      },
+      {
+        team: "0512修改",
+        scene: "更商业更精致 / 葡萄牙红",
+        path: "0512修改/更商业更精致/葡萄牙红",
+        files: [
+          "ChatGPT Image 2026年5月12日 21_32_30.png",
+          "ChatGPT Image 2026年5月12日 21_34_25.png",
+          "ChatGPT Image 2026年5月12日 21_36_10.png",
+          "ChatGPT Image 2026年5月12日 21_38_07.png"
+        ]
+      },
+      {
+        team: "0512修改",
+        scene: "更商业更精致 / 美国队",
+        path: "0512修改/更商业更精致/美国队",
+        files: [
+          "ChatGPT Image 2026年5月12日 21_33_02.png",
+          "ChatGPT Image 2026年5月12日 21_35_38.png",
+          "ChatGPT Image 2026年5月12日 21_37_57.png",
+          "ChatGPT Image 2026年5月12日 21_39_46.png"
+        ]
+      }
+    ];
+
+    const items = groups.flatMap(group => group.files.map(file => ({
+      team: group.team,
+      scene: group.scene,
+      file,
+      path: `${group.path || `${group.team}/${group.scene}`}/${file}`
+    })));
+
+    const state = {
+      team: "全部",
+      scene: "全部",
+      query: ""
+    };
+
+    const teamOrder = ["全部", ...new Set(groups.map(group => group.team))];
+    const sceneOrder = ["全部", ...new Set(groups.map(group => group.scene))];
+    const sectionsEl = document.querySelector("#sections");
+    const emptyEl = document.querySelector("#empty");
+    const totalCountEl = document.querySelector("#totalCount");
+    const teamCountEl = document.querySelector("#teamCount");
+    const sceneCountEl = document.querySelector("#sceneCount");
+    const visibleCountEl = document.querySelector("#visibleCount");
+    const searchEl = document.querySelector("#search");
+    const lightbox = document.querySelector("#lightbox");
+    const lightboxImage = document.querySelector("#lightboxImage");
+    const lightboxInfo = document.querySelector("#lightboxInfo");
+
+    function tagClass(team) {
+      if (team === "美国队款") return "team-us";
+      if (team === "葡萄牙红款") return "team-red";
+      if (team === "葡萄牙红绿款") return "team-redgreen";
+      return "scene";
+    }
+
+    function makeChip(label, groupName) {
+      const button = document.createElement("button");
+      button.className = "chip";
+      button.type = "button";
+      button.textContent = label;
+      button.dataset.value = label;
+      button.addEventListener("click", () => {
+        state[groupName] = label;
+        render();
+      });
+      return button;
+    }
+
+    function setupFilters() {
+      const teamFilters = document.querySelector("#teamFilters");
+      const sceneFilters = document.querySelector("#sceneFilters");
+      teamOrder.forEach(label => teamFilters.appendChild(makeChip(label, "team")));
+      sceneOrder.forEach(label => sceneFilters.appendChild(makeChip(label, "scene")));
+      searchEl.addEventListener("input", event => {
+        state.query = event.target.value.trim().toLowerCase();
+        render();
+      });
+    }
+
+    function matches(item) {
+      const teamOk = state.team === "全部" || item.team === state.team;
+      const sceneOk = state.scene === "全部" || item.scene === state.scene;
+      const haystack = `${item.team} ${item.scene} ${item.file}`.toLowerCase();
+      const queryOk = !state.query || haystack.includes(state.query);
+      return teamOk && sceneOk && queryOk;
+    }
+
+    function render() {
+      document.querySelectorAll("#teamFilters .chip").forEach(chip => {
+        chip.classList.toggle("active", chip.dataset.value === state.team);
+      });
+      document.querySelectorAll("#sceneFilters .chip").forEach(chip => {
+        chip.classList.toggle("active", chip.dataset.value === state.scene);
+      });
+
+      sectionsEl.innerHTML = "";
+      let visibleCount = 0;
+
+      groups.forEach(group => {
+        const groupItems = group.files.map(file => ({
+          team: group.team,
+          scene: group.scene,
+          file,
+          path: `${group.path || `${group.team}/${group.scene}`}/${file}`
+        })).filter(matches);
+
+        if (!groupItems.length) return;
+        visibleCount += groupItems.length;
+
+        const section = document.createElement("section");
+        section.className = "section";
+        section.innerHTML = `
+          <div class="section-head">
+            <h2>${group.team} / ${group.scene}</h2>
+            <div class="section-meta">${groupItems.length} 张</div>
+          </div>
+          <div class="gallery"></div>
+        `;
+
+        const gallery = section.querySelector(".gallery");
+        groupItems.forEach(item => {
+          const card = document.createElement("article");
+          card.className = "card";
+          card.innerHTML = `
+            <img src="${encodeURI(item.path)}" alt="${item.team} ${item.scene}">
+            <div class="caption">
+              <div class="tags">
+                <span class="tag ${tagClass(item.team)}">${item.team}</span>
+                <span class="tag scene">${item.scene}</span>
+              </div>
+              <div class="file">${item.file}</div>
+            </div>
+          `;
+          card.addEventListener("click", () => openLightbox(item));
+          gallery.appendChild(card);
+        });
+
+        sectionsEl.appendChild(section);
+      });
+
+      totalCountEl.textContent = items.length;
+      teamCountEl.textContent = teamOrder.length - 1;
+      sceneCountEl.textContent = sceneOrder.length - 1;
+      visibleCountEl.textContent = visibleCount;
+      emptyEl.style.display = visibleCount ? "none" : "block";
+    }
+
+    function openLightbox(item) {
+      lightboxImage.src = encodeURI(item.path);
+      lightboxImage.alt = `${item.team} ${item.scene}`;
+      lightboxInfo.textContent = `${item.team} / ${item.scene} / ${item.file}`;
+      lightbox.classList.add("open");
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove("open");
+      lightboxImage.removeAttribute("src");
+    }
+
+    document.querySelector("#close").addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", event => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeLightbox();
+    });
+
+    setupFilters();
+    render();
+  </script>
+</body>
+</html>
