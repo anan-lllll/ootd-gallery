@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TORRAS World Cup OOTD Prompt Library</title>
+  <style>
+    :root {
+      --bg: #f6f3ee;
+      --ink: #171717;
+      --muted: #6b665f;
+      --line: #ddd6ca;
+      --panel: #fffaf2;
+      --panel2: #ffffff;
+      --accent: #9f2f2f;
+      --green: #0e6d55;
+      --blue: #205c9d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.55;
+    }
+    header {
+      padding: 28px 32px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fffdf8;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      letter-spacing: 0;
+    }
+    .sub { color: var(--muted); font-size: 14px; max-width: 980px; }
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      align-items: center;
+    }
+    .filter {
+      border: 1px solid var(--line);
+      background: var(--panel2);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 14px;
+      color: var(--ink);
+    }
+    main { padding: 28px 32px 48px; }
+    .group {
+      margin: 0 0 28px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .group-head {
+      display: grid;
+      grid-template-columns: 1fr minmax(220px, 360px);
+      gap: 22px;
+      padding: 22px;
+      border-bottom: 1px solid var(--line);
+      background: #fff8eb;
+    }
+    h2 { margin: 0 0 8px; font-size: 21px; }
+    .meta { color: var(--muted); font-size: 13px; }
+    .refs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .ref {
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .ref img {
+      width: 100%;
+      height: 112px;
+      object-fit: cover;
+      display: block;
+    }
+    .ref div {
+      padding: 6px;
+      font-size: 11px;
+      color: var(--muted);
+      word-break: break-all;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding: 18px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--panel2);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    h3 { margin: 0; font-size: 15px; }
+    .badge {
+      color: #fff;
+      background: var(--accent);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .badge.green { background: var(--green); }
+    .badge.blue { background: var(--blue); }
+    textarea {
+      width: 100%;
+      min-height: 300px;
+      border: 0;
+      resize: vertical;
+      padding: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.55;
+      color: #232323;
+      background: #fff;
+      outline: none;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      background: #fffdf8;
+    }
+    button {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 7px 10px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--ink);
+    }
+    button.primary {
+      background: #171717;
+      color: #fff;
+      border-color: #171717;
+    }
+    .notice {
+      margin: 0 0 20px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      background: #fffdf8;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .hidden { display: none; }
+    @media (max-width: 980px) {
+      .group-head { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: 1fr; }
+      header, main { padding-left: 18px; padding-right: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TORRAS 世界杯限定手机壳 OOTD 提示词库</h1>
+    <div class="sub">共 36 张：3 个 SKU × 3 个内容方向 × 每组 4 张。每组先上传右侧参考图，再逐条复制提示词到 ChatGPT 网页端生成。</div>
+    <div class="toolbar">
+      <select id="skuFilter" class="filter">
+        <option value="">全部 SKU</option>
+        <option value="葡萄牙红绿款">葡萄牙红绿款</option>
+        <option value="葡萄牙红款">葡萄牙红款</option>
+        <option value="美国队款">美国队款</option>
+      </select>
+      <select id="directionFilter" class="filter">
+        <option value="">全部方向</option>
+        <option value="球迷身份">球迷身份</option>
+        <option value="日常穿搭">日常穿搭</option>
+        <option value="精致穿搭">精致穿搭</option>
+      </select>
+      <button id="resetFilters">重置筛选</button>
+    </div>
+  </header>
+  <main>
+    <div class="notice">统一规则：1:1 方图；轮播 1 手机壳 8%-12%，轮播 2 为 18%-25%，轮播 3 为 45%-60%，轮播 4 为 30%-45% 或多款合计 35%-50%。手持/口袋/平放时 Ostand 闭合；桌面支架/拍摄辅助时 Ostand 打开。</div>
+    <div id="groups"></div>
+  </main>
+  <script>
+    const NEG = "Avoid infographic, poster, chart, educational diagram, animals, fossils, unrelated objects, text overlay, fake logos, unofficial team crests, player likeness, celebrity likeness, watermark, distorted phone case, wrong phone case colors, distorted hands, extra fingers, product catalog style, studio e-commerce white background.";
+    const refs = {
+      redgreen: ["pt-redgreen-case-ref-1200.jpg"],
+      red: ["pt-red-case-ref-1200.jpg"],
+      usa: ["usa-case-ref-1200.jpg"],
+      jersey: ["portugal-jersey-ref-1200.jpg"],
+      all: ["pt-redgreen-case-ref-1200.jpg", "pt-red-case-ref-1200.jpg", "usa-case-ref-1200.jpg"]
+    };
+    const caseDetails = {
+      redgreen: "TORRAS Portugal red-green case: transparent red frame, green dotted side anti-slip grip, warm red upper back fading into deep green lower back, fine vertical gold lines, metallic gold circular Ostand ring with red/green details, white corner markings, visible camera cutout.",
+      red: "TORRAS Portugal red/pink case: transparent wine-red/rose-red frame, soft pale pink back plate, green dotted side anti-slip grip, gold buttons, gold metallic circular Ostand ring with red/green line details, delicate wave texture, visible camera cutout.",
+      usa: "TORRAS USA blue-red-white case: transparent blue frame, red dotted side anti-slip grip, blue-white-red star and wave/stripe back plate, metallic silver/light-gold circular Ostand ring with red/blue line details, visible camera cutout."
+    };
+    const jersey = "Authorized Portugal red football jersey reference: red jersey, green collar and sleeve accents, subtle red wave texture, Portugal crest allowed.";
+
+    const groups = [
+      {
+        sku: "葡萄牙红绿款", direction: "球迷身份", badge: "green", refs: [...refs.redgreen, ...refs.jersey],
+        title: "样板 1｜球迷身份｜葡萄牙红绿款",
+        prompts: [
+          ["1 封面 Hook", `Use the uploaded reference images as strict visual references. Generate one square 1:1 photorealistic UGC-style Instagram/Facebook carousel cover image.\n\nScene: A stylish adult Portugal football fan arriving near a stadium before a summer match, warm late-afternoon natural light, realistic match-day atmosphere, candid OOTD photo, not a studio ad.\n\nSubject and outfit: One adult fan, face not dominant, wearing a red Portugal football jersey inspired by the uploaded jersey reference, with green collar/sleeve accents and subtle red wave texture. Casual summer outfit with denim or track pants. Optional red-green scarf or match-day accessory, but do not let it dominate.\n\nPhone case: The person naturally holds a phone with the TORRAS Portugal red-green case from the uploaded reference. The phone case should occupy about 8%-12% of the full image. Product accuracy: ${caseDetails.redgreen} Ostand must be closed and flat because the phone is hand-held.\n\nComposition: Square crop, mid-body candid OOTD angle. The first read should be outfit and fan identity; the second read should be the phone case. Phone case near the hand/lower third, naturally integrated with the outfit color palette.\n\nStyle: Photorealistic, natural UGC lifestyle photo, slightly imperfect, real texture, shallow depth of field, no glossy e-commerce look.\n\n${NEG}`],
+          ["2 场景代入", `Use the uploaded references strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red-green case, fan identity direction, carousel image 2 scene immersion.\n\nScene: entering the stadium concourse, standing near the seating gate, or checking in before the match. Warm late-afternoon light, other fans softly blurred, realistic match-day UGC.\n\nAction/OOTD: Continue the same type of Portugal fan. Do not make them stiffly standing; show active behavior such as taking a phone selfie through reflective stadium glass, checking a digital ticket, or raising the phone to take a quick selfie with the stadium behind them. Face can be partial or not dominant.\n\nPhone case: ${caseDetails.redgreen} Product should occupy about 18%-25% of the image. Ostand closed and flat because the phone is hand-held.\n\nComposition: Square crop, candid mid-body or close lifestyle crop. First read: match-day OOTD and stadium entry. Second read: the phone case in active use.\n\n${NEG}`],
+          ["3 产品卖点", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red-green case product selling point, still within the same fan match-day story.\n\nScene: close lifestyle detail near stadium seats or concourse railing, warm summer match-day light. A Portugal jersey sleeve, denim, scarf edge, or stadium wristband can appear as context, but the phone case is the main subject.\n\nComposition: product should occupy about 45%-60% of the full image. Show the back of the phone case clearly in hand or placed naturally on a jersey/scarf/seat ledge. Avoid white studio catalog style.\n\nProduct accuracy: ${caseDetails.redgreen} Ostand must be closed and flat if hand-held or lying flat. Case must not deform or become generic.\n\nMood: close, tactile, premium but still UGC; show material, grip texture, ring detail, and color match with Portugal outfit.\n\n${NEG}`],
+          ["4 多国家选择", `Use all uploaded phone case references strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red-green case, fan identity direction, carousel image 4 multi-country limited case choice.\n\nScene: after stadium entry, a candid match-day flat-lay or hands-on moment on a stadium seat, fan scarf, denim jacket, or small cafe/bar table near the stadium. Real UGC, warm summer light, not catalog white background.\n\nSubject/action: show a fan or small friend-group context through hands, jersey sleeves, scarf edges, tickets, or casual outfit details. It should feel like fans choosing which national-team case matches today's OOTD.\n\nProducts: show three TORRAS limited phone cases together. Portugal red-green case is hero, Portugal red/pink and USA blue-red-white are supporting options. All phone cases combined should occupy about 35%-50% of the full image. Keep each case distinct and accurate. All cases lying flat or hand-held, so Ostands closed and flat.\n\n${NEG} Avoid mixed-up SKU colors, unofficial USA crest, and open Ostand.`]
+        ]
+      },
+      {
+        sku: "葡萄牙红绿款", direction: "日常穿搭", badge: "green", refs: refs.redgreen,
+        title: "扩展｜日常穿搭｜葡萄牙红绿款",
+        prompts: [
+          ["1 封面 Hook", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 photorealistic UGC-style Instagram/Facebook carousel image. Stage 2 OOTD, Portugal red-green case, daily outfit direction, carousel image 1 cover Hook.\n\nScene: relaxed summer street, coffee pickup window, parking-lot hangout, or city block before watching a match with friends. Real UGC, not stadium-heavy and not studio.\n\nSubject/action: one stylish adult wearing casual blockcore or summer streetwear with red/green accents, denim or track pants, sneakers, and simple accessories. Not stiff standing: show them checking a group chat, taking a mirror/window selfie, holding the phone while walking, or asking a friend to take an outfit photo. Face not dominant.\n\nPhone case: ${caseDetails.redgreen} Phone case 8%-12% of image. Ostand closed and flat.\n\nComposition: outfit/lifestyle first read, product visible within 3 seconds, natural hand position, square crop.\n\n${NEG}`],
+          ["2 场景代入", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red-green case, daily outfit direction, carousel image 2 scene immersion.\n\nScene: real everyday match-day adjacent moment, such as car interior with friends, outdoor cafe table, street bench, or small apartment pre-game meetup. Summer daylight, relaxed UGC.\n\nAction: person actively using the phone to check a match time, reply to friends, scan a casual watch-party invite, or take a low-effort selfie. No stiff pose.\n\nPhone case: ${caseDetails.redgreen} Phone case 18%-25% of image. Ostand closed because hand-held or pocket/desk flat.\n\nComposition: lifestyle setting first, phone case second, natural scale.\n\n${NEG}`],
+          ["3 产品卖点", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red-green case, daily outfit direction, carousel image 3 product selling point.\n\nScene: close lifestyle detail on denim jacket, cafe table, car console, or casual jersey fabric. Real texture, warm daylight, not white studio.\n\nProduct: phone case occupies 45%-60% of image. Show back clearly and accurately: ${caseDetails.redgreen} Ostand closed and flat.\n\nContext: denim, sunglasses, iced drink, keys, casual red/green outfit detail, no visible brand logos.\n\n${NEG}`],
+          ["4 玩法转化", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red-green case, daily outfit direction, carousel image 4 phone case daily use conversion.\n\nScene: cafe table, apartment watch-party coffee table, car tailgate, or street bench. Casual summer UGC.\n\nUse case: show Ostand open as a practical stand for watching match highlights, video call, hands-free group selfie framing, or content review. Ostand must be open with realistic hinge structure and stable support.\n\nProduct: ${caseDetails.redgreen} Phone case 30%-45% of image, no SKU color drift.\n\n${NEG} Avoid impossible Ostand hinge.`]
+        ]
+      },
+      {
+        sku: "葡萄牙红绿款", direction: "精致穿搭", badge: "green", refs: refs.redgreen,
+        title: "扩展｜精致穿搭｜葡萄牙红绿款",
+        prompts: [
+          ["1 封面 Hook", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red-green case, refined outfit direction, carousel image 1 cover Hook.\n\nScene: quiet design studio doorway, minimal cafe entrance, gallery-adjacent street, or refined creator neighborhood in warm daylight. Real but tasteful UGC.\n\nSubject/action: stylish adult creator/design-minded fan wearing cream, muted green, burgundy, tailored neutral, or light denim pieces with subtle red-green connection. Not stiff standing: checking a message while walking, taking a window reflection outfit selfie, or adjusting sunglasses with phone in hand. Face not dominant.\n\nPhone case: ${caseDetails.redgreen} Phone case 8%-12% of image. Ostand closed.\n\nComposition: refined outfit and atmosphere first, phone case visible within 3 seconds.\n\n${NEG}`],
+          ["2 场景代入", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red-green case, refined outfit direction, carousel image 2 creator lifestyle scene.\n\nScene: refined cafe table, creator desk, gallery lobby, or studio work surface. Natural daylight, lived-in, no visible logos.\n\nAction: person using the phone to review content, photograph coffee/table details, check a shot list, or take a subtle outfit selfie. The person should feel like a creator or design-minded user, not a posed model.\n\nPhone case: ${caseDetails.redgreen} Phone case 18%-25%, Ostand closed because hand-held.\n\nComposition: creator lifestyle first, phone case second, restrained premium UGC.\n\n${NEG}`],
+          ["3 产品卖点", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red-green case, refined outfit direction, carousel image 3 premium product detail.\n\nScene: tasteful desk, quiet cafe table, or gallery surface with cream sleeve, muted green notebook, brushed metal detail, soft natural shadows. Real UGC texture, not e-commerce.\n\nProduct: 45%-60% of image, accurate ${caseDetails.redgreen} Ostand closed and flat.\n\nMood: premium, tactile, restrained, creator lifestyle.\n\n${NEG}`],
+          ["4 高级玩法", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red-green case, refined outfit direction, carousel image 4 refined Ostand use.\n\nScene: creator workspace, quiet cafe table, or gallery bench in natural daylight. Cream, muted green, burgundy, brushed metal, notebook or camera details. No logos.\n\nUse case: show the phone case with Ostand open as a stable stand for outfit selfie framing, video call, filming coffee/details, or content review. Ostand must be open with realistic hinge structure and stable support.\n\nProduct: ${caseDetails.redgreen} Product 30%-45% of image. Premium UGC, no white studio.\n\n${NEG} Avoid impossible Ostand hinge.`]
+        ]
+      },
+      {
+        sku: "葡萄牙红款", direction: "球迷身份", badge: "", refs: [...refs.red, ...refs.jersey],
+        title: "扩展｜球迷身份｜葡萄牙红款",
+        prompts: [
+          ["1 封面 Hook", `Use uploaded references strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red/pink case, fan identity direction, carousel image 1 cover Hook.\n\nScene: stadium arrival or fan bar exterior, warm summer match-day light, realistic UGC.\n\nSubject/action: stylish adult Portugal fan wearing authorized red Portugal jersey with green collar/sleeve accents, but styled more refined and softer than the red-green SKU. Not stiff standing: taking a quick selfie, checking ticket, walking with scarf, or friend taking OOTD. Face not dominant.\n\nPhone case: ${caseDetails.red} Phone case 8%-12% of image. Ostand closed.\n\nComposition: fan identity and outfit first read, elegant phone case visible within 3 seconds.\n\n${NEG}`],
+          ["2 场景代入", `Use uploaded references strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red/pink case, fan identity direction, carousel image 2.\n\nScene: stadium entrance, seat row, fan bar table, or match queue. Warm natural light, realistic match-day UGC.\n\nAction: person actively checking a digital ticket, texting friends, taking a quick selfie, or holding the phone while moving toward seats. No stiff standing.\n\nPhone case: ${caseDetails.red} Phone case 18%-25%, Ostand closed because hand-held.\n\nOutfit: ${jersey} Styled polished and softer.\n\n${NEG}`],
+          ["3 产品卖点", `Use uploaded Portugal red/pink case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red/pink case, fan identity direction, carousel image 3 product detail.\n\nScene: phone on Portugal jersey, fan scarf, stadium seat, or fan bar table. Real match-day UGC texture, not white studio.\n\nProduct: 45%-60% of image, accurate ${caseDetails.red} Ostand closed and flat.\n\nContext: jersey red/green fabric, scarf edge, ticket, soft shadows.\n\n${NEG}`],
+          ["4 多国家选择", `Use uploaded references strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red/pink case, fan identity direction, carousel image 4 multi-country choice.\n\nScene: match-day flat-lay or fans choosing cases on stadium seat, fan scarf, denim jacket, or bar table. Real UGC, not catalog white background.\n\nProducts: show Portugal red/pink case as hero with Portugal red-green and USA cases as supporting options. Combined cases 35%-50% of image. Keep each SKU accurate and distinct: red/pink has wine-red transparent frame, pale pink back, green grip, gold Ostand; red-green has red frame, green lower back, gold vertical lines, green grip; USA has blue frame, red grip, blue-white-red star/wave back. All Ostands closed and flat.\n\n${NEG} Avoid mixed-up SKU colors and open Ostand.`]
+        ]
+      },
+      {
+        sku: "葡萄牙红款", direction: "日常穿搭", badge: "", refs: refs.red,
+        title: "扩展｜日常穿搭｜葡萄牙红款",
+        prompts: [
+          ["1 封面 Hook", `Use uploaded Portugal red/pink case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red/pink case, daily outfit direction, carousel image 1.\n\nScene: summer cafe, city block, shopping street, car mirror, or friend meetup. Real UGC.\n\nSubject/action: stylish casual adult wearing soft burgundy, pale pink, cream, muted green, denim, or casual tailored pieces. Not stiff standing: mirror selfie, checking messages, walking with phone, or friend-shot OOTD. Face not dominant.\n\nPhone case: ${caseDetails.red} Phone case 8%-12%, Ostand closed.\n\n${NEG}`],
+          ["2 场景代入", `Use uploaded Portugal red/pink case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red/pink case, daily outfit direction, carousel image 2.\n\nScene: cafe table, car interior, friend meetup, street bench, or shopping street. Summer daylight, real UGC.\n\nAction: person using phone casually to text friends, take a mirror selfie, check a map, or photograph coffee/table details. No stiff pose.\n\nPhone case: ${caseDetails.red} Case 18%-25%, accurate, Ostand closed.\n\n${NEG}`],
+          ["3 产品卖点", `Use uploaded Portugal red/pink case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red/pink case, daily outfit direction, carousel image 3 product detail.\n\nScene: product detail on denim, tote, cafe table, or soft knit sleeve. Real texture, no white studio.\n\nProduct: case 45%-60%, accurate ${caseDetails.red} Ostand closed and flat.\n\nContext: cream, soft burgundy, pale pink, muted green, denim, coffee, notebook, no logos.\n\n${NEG}`],
+          ["4 玩法转化", `Use uploaded Portugal red/pink case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Portugal red/pink case, daily outfit direction, carousel image 4 daily Ostand use.\n\nScene: cafe table, creator desk, car console, or friend meetup table. Real refined daily UGC.\n\nUse case: Ostand open as stand for coffee table content review, outfit selfie framing, video call, or hands-free viewing. Ostand must be open with realistic hinge structure.\n\nProduct: ${caseDetails.red} Case 30%-45%, refined daily UGC.\n\n${NEG} Avoid impossible Ostand hinge.`]
+        ]
+      },
+      {
+        sku: "葡萄牙红款", direction: "精致穿搭", badge: "", refs: refs.red,
+        title: "样板 3｜精致穿搭｜葡萄牙红款",
+        prompts: [
+          ["1 封面 Hook", `Use the uploaded Portugal red/pink phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Refined OOTD cover Hook for TORRAS Portugal red/pink case.\n\nScene: warm minimal cafe entrance, design studio doorway, quiet gallery street, or creator neighborhood in early summer daylight. Clean but lived-in, real UGC, not studio product photography.\n\nSubject/action: one stylish adult creator/design-minded fan, face not dominant, wearing refined everyday outfit in soft burgundy, cream, muted green, light denim, or tailored neutral pieces. Not stiff standing: show them using the phone for a mirror selfie, checking a message while walking, adjusting sunglasses with phone in hand, or framing a casual outfit shot.\n\nPhone case: ${caseDetails.red} Phone case 8%-12% of image. Ostand closed and flat because hand-held.\n\nComposition: square crop, mid-body or three-quarter candid OOTD framing, outfit first read, elegant phone case second read.\n\n${NEG}`],
+          ["2 场景代入", `Use the uploaded Portugal red/pink phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Refined creator lifestyle scene immersion.\n\nScene: cafe table, design studio desk, gallery lobby, or creator workspace with natural daylight. Tasteful but lived-in: notebook, iced coffee, camera, laptop edge, fabric tote, no visible brand logos.\n\nAction: show the person actively using the phone as part of creator life: taking a mirror outfit selfie, checking shot list, photographing coffee/table details, or reviewing content. No stiff pose.\n\nPhone case: ${caseDetails.red} Phone case 18%-25% of full image, clearly visible. Ostand closed and flat because hand-held.\n\nComposition: lifestyle context first, phone case visible within 3 seconds, refined color match with outfit.\n\n${NEG}`],
+          ["3 产品卖点", `Use the uploaded Portugal red/pink phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Premium product detail close-up.\n\nScene: refined creator desk/cafe/gallery table, natural daylight, tactile real UGC texture. Include subtle outfit or workspace cues: cream knit sleeve, muted green accessory, notebook, iced coffee, camera strap, no logos.\n\nProduct composition: TORRAS Portugal red/pink case is the main subject, occupying about 45%-60% of the image. Show the back clearly, in hand or lying flat on a tasteful surface.\n\nProduct accuracy: ${caseDetails.red} Ostand closed and flat if hand-held or lying flat.\n\nMood: premium but not e-commerce; editorial UGC close-up with material detail and soft shadows.\n\n${NEG}`],
+          ["4 高级玩法", `Use the uploaded Portugal red/pink phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. Refined Ostand usage / conversion.\n\nScene: elegant creator workspace, cafe table, gallery bench, or minimalist desk with natural daylight. Real UGC lifestyle, not studio product catalog.\n\nUse case: show the TORRAS Portugal red/pink case with Ostand open as a premium stand for video call, outfit selfie framing, filming coffee/details, or hands-free content review. Ostand must be open with realistic hinge structure and stable support.\n\nProduct composition: phone case occupies about 30%-45% of the image. Accuracy: ${caseDetails.red} Keep colors soft and refined.\n\nContext: cream/burgundy/muted green outfit detail, notebook, camera, iced coffee, laptop edge, fabric tote, no logos.\n\n${NEG} Avoid impossible Ostand hinge.`]
+        ]
+      },
+      {
+        sku: "美国队款", direction: "球迷身份", badge: "blue", refs: refs.usa,
+        title: "扩展｜球迷身份｜美国队款",
+        prompts: [
+          ["1 封面 Hook", `Use uploaded USA phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. USA case, fan identity direction, carousel image 1.\n\nScene: sports bar exterior, stadium-adjacent street, fan meetup, or tailgate-style pregame. Blue-white-red fan energy, but no official USA soccer crest/federation badge/sportswear logo.\n\nSubject/action: stylish adult fan wearing non-official blue-white soccer-inspired jersey with red accents. Not stiff standing: taking selfie, checking ticket, walking with friends, or holding phone while cheering. Face not dominant.\n\nPhone case: ${caseDetails.usa} Case 8%-12%, Ostand closed.\n\n${NEG} Avoid official USA team crest, official badge, sportswear logo, Portugal red-green environment.`],
+          ["2 场景代入", `Use uploaded USA case reference strictly. Generate one square 1:1 photorealistic UGC image. USA case, fan identity direction, carousel image 2.\n\nScene: fan bar, tailgate, stadium entrance, or watch-party line. Blue-white-red atmosphere without official crests/logos.\n\nAction: person uses phone for ticket, selfie, group chat, or match time check. No stiff pose.\n\nPhone case: ${caseDetails.usa} Case 18%-25%, Ostand closed.\n\n${NEG} Avoid official USA crest and Portugal red-green scene.`],
+          ["3 产品卖点", `Use uploaded USA case reference strictly. Generate one square 1:1 photorealistic UGC image. USA case, fan identity direction, carousel image 3 product detail.\n\nScene: product close-up on blue-white jersey fabric, denim, fan scarf without logos, or bar table. Real UGC texture.\n\nProduct: case 45%-60%, accurate ${caseDetails.usa} Ostand closed and flat.\n\n${NEG} Avoid official USA crest, wrong colors, open Ostand.`],
+          ["4 多国家选择", `Use uploaded references strictly. Generate one square 1:1 photorealistic UGC image. USA case, fan identity direction, carousel image 4 multi-country choice.\n\nScene: fan choice moment with USA case as hero and other country cases as supporting options if references are available. Stadium seat, fan scarf, denim jacket, or bar table. Real UGC, not catalog.\n\nProducts: combined products 35%-50%. USA hero: ${caseDetails.usa} Supporting Portugal cases should keep their correct red-green and red/pink SKU details. All Ostands closed and flat.\n\n${NEG} Avoid official USA crest, mixed-up SKU colors, open Ostand.`]
+        ]
+      },
+      {
+        sku: "美国队款", direction: "日常穿搭", badge: "blue", refs: refs.usa,
+        title: "样板 2｜日常穿搭｜美国队款",
+        prompts: [
+          ["1 封面 Hook", `Use the uploaded USA phone case reference strictly. Generate one square 1:1 photorealistic UGC-style Instagram/Facebook carousel image. USA daily OOTD cover Hook.\n\nThis should first look like a real casual American retro / blockcore OOTD photo, then subtly like a phone case ad. Do not use any official USA soccer crest, federation badge, team logo, sportswear brand logo, or player likeness.\n\nScene: sunny neighborhood street, outdoor cafe, or parking-lot hangout before watching a football match with friends, early summer daylight, relaxed UGC lifestyle.\n\nSubject/action: one stylish adult casual fan wearing a non-official blue and white soccer-inspired jersey with simple red accents, vintage denim, sneakers, and simple accessories. Not stiff standing: show them using the phone for a casual selfie, checking a group chat, or holding the phone while leaning on a car/cafe railing. Face not dominant.\n\nPhone case: ${caseDetails.usa} Case 8%-12% of image. Ostand closed and flat because hand-held.\n\nComposition: square crop, candid mid-body OOTD framing, product visible within 3 seconds but not dominant. Outfit style is first read, case is second read.\n\n${NEG} Avoid official USA team crest, official badge, sportswear logo, Portugal red-green environment.`],
+          ["2 场景代入", `Use the uploaded USA phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. USA daily OOTD scene immersion.\n\nScene: realistic daily setting before watching a match: car interior with friends, outdoor cafe table, street corner, or convenience-store parking lot. Summer daylight, relaxed UGC.\n\nAction: show the person actively using the phone, not standing still. They may be checking match time, replying to friends, taking a casual selfie, or using the phone in the car/cafe. Face not dominant.\n\nPhone case: ${caseDetails.usa} Case 18%-25%, Ostand closed and flat because hand-held.\n\n${NEG} Avoid official USA crest and Portugal red-green scene.`],
+          ["3 产品卖点", `Use the uploaded USA phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. USA product selling point close-up.\n\nScene: casual everyday match-watch setup, such as phone on denim jacket, car console, outdoor cafe table, or jersey fabric. Real UGC texture, not studio product catalog.\n\nProduct composition: TORRAS USA case is the main subject, occupying about 45%-60% of the image. Show the back clearly, either in hand or lying flat with lifestyle props.\n\nProduct accuracy: ${caseDetails.usa} Ostand closed and flat if hand-held or lying flat.\n\nContext: include subtle blue-white jersey fabric, denim, sunglasses, keys, iced drink, or match ticket without logos. No official USA team crest or federation badge.\n\n${NEG}`],
+          ["4 玩法转化", `Use the uploaded USA phone case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. USA everyday Ostand usage / conversion.\n\nScene: relaxed daily match-watching moment at an outdoor cafe table, car tailgate setup, or desk with snacks and an iced drink, blue-white-red outfit details nearby. Real UGC lifestyle, not product catalog.\n\nAction/use case: show the TORRAS USA phone case being used with the Ostand open as a practical stand for watching match highlights, video call/selfie framing, or hands-free viewing. The phone can stand on a table or be angled for filming. Ostand must be open with realistic hinge structure and stable support.\n\nProduct composition: phone case should occupy about 30%-45% of the image. Product accuracy: ${caseDetails.usa} Do not mix with Portugal colors.\n\n${NEG} Avoid official USA crest and impossible Ostand hinge.`]
+        ]
+      },
+      {
+        sku: "美国队款", direction: "精致穿搭", badge: "blue", refs: refs.usa,
+        title: "扩展｜精致穿搭｜美国队款",
+        prompts: [
+          ["1 封面 Hook", `Use uploaded USA case reference strictly. Generate one square 1:1 photorealistic UGC-style carousel image. USA case, refined outfit direction, carousel image 1.\n\nScene: modern cafe entrance, gallery street, creative studio, or clean city corner. Refined summer daylight. Blue/white/red used subtly, not patriotic costume.\n\nSubject/action: stylish adult creator in navy, white, light denim, soft red accent, silver accessories. Non-official soccer-inspired detail allowed, no crest/logo. Not stiff: mirror selfie, checking content, walking with phone. Face not dominant.\n\nPhone case: ${caseDetails.usa} Case 8%-12%, Ostand closed.\n\n${NEG} Avoid official USA crest, sportswear logo, patriotic costume, Portugal red-green environment.`],
+          ["2 场景代入", `Use uploaded USA case reference strictly. Generate one square 1:1 image. USA case, refined outfit direction, carousel image 2 creator scene.\n\nScene: refined creator scene at cafe table, studio desk, or gallery lobby. Natural daylight, clean but lived-in.\n\nAction: person uses phone for content review, outfit selfie, or photographing details. No stiff pose.\n\nPhone case: ${caseDetails.usa} Case 18%-25%, accurate, Ostand closed.\n\n${NEG} Avoid official crests/logos and Portugal red-green scene.`],
+          ["3 产品卖点", `Use uploaded USA case reference strictly. Generate one square 1:1 image. USA case, refined outfit direction, carousel image 3 product detail.\n\nScene: product close-up on clean desk, denim, navy/white fabric, brushed metal, iced drink. Refined UGC, not white studio.\n\nProduct: case 45%-60%, accurate ${caseDetails.usa} Ostand closed and flat.\n\nMood: premium creator lifestyle, restrained blue/white/red palette.\n\n${NEG}`],
+          ["4 高级玩法", `Use uploaded USA case reference strictly. Generate one square 1:1 image. USA case, refined outfit direction, carousel image 4 refined Ostand use.\n\nScene: refined cafe/studio table, gallery bench, or creator desk with navy, white, light denim, brushed metal, iced drink, notebook. No logos.\n\nUse case: Ostand open as stand for video call, outfit framing, filming details, or content review. Ostand must be open with realistic hinge structure and stable support.\n\nProduct: ${caseDetails.usa} Case 30%-45%, accurate, no official crests/logos.\n\n${NEG} Avoid impossible Ostand hinge and Portugal red-green environment.`]
+        ]
+      }
+    ];
+
+    groups.push(
+      {
+        sku: "葡萄牙红绿款", direction: "穿搭 OOTD 拼贴", badge: "green", refs: refs.redgreen,
+        title: "新增｜穿搭 OOTD 拼贴｜葡萄牙红绿款",
+        prompts: [
+          ["穿搭 OOTD 拼贴", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 photorealistic UGC-style collage image for Instagram/Facebook ads.\n\nConcept: outfit pairing collage. Show how the TORRAS Portugal red-green case can match different everyday private outfits, guiding users to choose one case for their own wardrobe.\n\nLayout: tasteful lifestyle collage, not infographic and not a chart. Use 4-6 natural outfit moments arranged like a real creator moodboard: mirror selfie crop, hand holding phone beside denim, cafe table with outfit accessories, sneaker/track pants detail, tote or sunglasses detail. Keep the collage editorial and UGC, with soft overlaps or photo-strip spacing, no heavy graphic design.\n\nProduct: the same TORRAS Portugal red-green case appears in multiple moments and must match the reference: transparent red frame, green dotted side grip, warm red upper back fading into deep green lower back, fine vertical gold lines, metallic gold circular Ostand ring with red/green details, white corner markings. Ostand closed in hand/pocket/flat-lay moments.\n\nOutfits: casual summer OOTD with red/green accents, denim, white tee, track pants, muted green overshirt, burgundy cap, sneakers. No visible brand logos.\n\nComposition: square crop, phone case should be visible in every mini-moment, all cases combined about 35%-50% of the image. First read: wardrobe matching ideas. Second read: the red-green phone case as the styling anchor.\n\nAvoid poster, chart, educational diagram, animals, fossils, fake logos, player likeness, celebrity likeness, watermark, distorted phone case, wrong phone case colors, distorted hands, extra fingers, product catalog style, studio white background, messy scrapbook, excessive text overlay.`]
+        ]
+      },
+      {
+        sku: "葡萄牙红绿款", direction: "扫光动态感视觉", badge: "green", refs: refs.redgreen,
+        title: "新增｜扫光动态感视觉｜葡萄牙红绿款",
+        prompts: [
+          ["扫光动态感视觉", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 premium photorealistic ad visual with dynamic side-view lighting.\n\nConcept: limited-edition scarcity visual. Product side and back angle with a sweeping light beam across the case, creating motion, urgency, and a collector feeling. It should feel cinematic and premium, not a catalog render.\n\nProduct: TORRAS Portugal red-green case must match the reference: transparent red frame, green dotted anti-slip side grip, warm red upper back fading into deep green lower back, fine vertical gold line pattern, metallic gold Ostand ring with red/green details, white corner markings. Show a strong side/profile angle that highlights thickness, side grip texture, buttons, and Ostand structure. Ostand closed unless the angle naturally shows the ring as part of the back.\n\nScene/background: dark warm stadium-tunnel or abstract match-night environment, subtle red and green reflections, directional sweep light passing over the product edge, soft motion blur only in the light, product itself sharp and not distorted.\n\nText: include exactly the words "Limited Edition 2026" in small refined typography, placed cleanly in negative space. No other text.\n\nComposition: square crop, product occupies 45%-60% of image. Premium scarcity mood, limited drop feeling, missed-it-and-it-is-gone energy.\n\nAvoid infographic, chart, educational diagram, animals, fossils, fake logos, unofficial crests, player likeness, celebrity likeness, watermark, distorted phone case, wrong colors, extra fingers, cheap neon, clutter, white studio background, excessive text.`]
+        ]
+      },
+      {
+        sku: "葡萄牙红款", direction: "穿搭 OOTD 拼贴", badge: "", refs: refs.red,
+        title: "新增｜穿搭 OOTD 拼贴｜葡萄牙红款",
+        prompts: [
+          ["穿搭 OOTD 拼贴", `Use the uploaded TORRAS Portugal red/pink phone case reference strictly. Generate one square 1:1 photorealistic UGC-style collage image for Instagram/Facebook ads.\n\nConcept: outfit pairing collage. Show how the TORRAS Portugal red/pink case pairs with different refined daily private outfits, guiding users to choose one case for their own wardrobe.\n\nLayout: tasteful creator moodboard collage, not infographic and not chart. Use 4-6 natural outfit moments: cafe mirror selfie, phone in hand with cream knit sleeve, denim and tote detail, burgundy/pink accessory flat-lay, soft green accent item, creator desk detail. Use soft overlaps or clean photo-strip spacing, realistic UGC photos, not graphic poster design.\n\nProduct: the same TORRAS Portugal red/pink case appears across the collage and must match the reference: transparent wine-red/rose-red frame, soft pale pink back plate, green dotted side anti-slip grip, gold buttons, gold metallic Ostand ring with red/green line details, delicate wave texture. Ostand closed in hand/pocket/flat-lay moments.\n\nOutfits: cream, soft burgundy, pale pink, muted green, light denim, tailored casual pieces, simple jewelry, no visible brand logos.\n\nComposition: square crop, phone case visible in every mini-moment, all cases combined about 35%-50% of image. First read: refined wardrobe matching ideas. Second read: the red/pink phone case as a soft fashion accessory.\n\nAvoid poster, chart, educational diagram, animals, fossils, fake logos, player likeness, celebrity likeness, watermark, distorted phone case, wrong colors, distorted hands, extra fingers, product catalog style, studio white background, messy scrapbook, excessive text overlay.`]
+        ]
+      },
+      {
+        sku: "葡萄牙红款", direction: "扫光动态感视觉", badge: "", refs: refs.red,
+        title: "新增｜扫光动态感视觉｜葡萄牙红款",
+        prompts: [
+          ["扫光动态感视觉", `Use the uploaded TORRAS Portugal red/pink phone case reference strictly. Generate one square 1:1 premium photorealistic ad visual with dynamic side-view lighting.\n\nConcept: limited-edition scarcity visual for a softer fashion-forward SKU. Show the product from a side/back three-quarter angle with a sweeping light beam across the transparent frame and Ostand, creating motion, rarity, and premium collector value.\n\nProduct: TORRAS Portugal red/pink case must match the reference: transparent wine-red/rose-red frame, soft pale pink back plate, green dotted anti-slip side grip, gold buttons, gold metallic circular Ostand ring with red/green line details, delicate back wave texture. Highlight the side grip, frame thickness, gold buttons, and ring detail. Ostand closed unless the back angle naturally shows the ring.\n\nScene/background: deep burgundy and warm neutral cinematic background, subtle muted green accent reflection, soft sweeping highlight across the product edge, product sharp and realistic.\n\nText: include exactly the words "Limited Edition 2026" in small elegant typography, placed in clean negative space. No other text.\n\nComposition: square crop, product occupies 45%-60% of image. Premium limited-drop feeling, refined and collectible, not loud or cheap.\n\nAvoid infographic, chart, educational diagram, animals, fossils, fake logos, player likeness, celebrity likeness, watermark, distorted phone case, wrong colors, extra fingers, clutter, white studio background, excessive text, cheap neon.`]
+        ]
+      },
+      {
+        sku: "美国队款", direction: "穿搭 OOTD 拼贴", badge: "blue", refs: refs.usa,
+        title: "新增｜穿搭 OOTD 拼贴｜美国队款",
+        prompts: [
+          ["穿搭 OOTD 拼贴", `Use the uploaded TORRAS USA blue-red-white phone case reference strictly. Generate one square 1:1 photorealistic UGC-style collage image for Instagram/Facebook ads.\n\nConcept: outfit pairing collage. Show how the TORRAS USA case matches different daily private outfits, guiding users to choose one case for their own wardrobe. No official USA soccer crest, federation badge, team logo, or sportswear brand logo.\n\nLayout: tasteful casual creator collage, not infographic and not chart. Use 4-6 natural outfit moments: non-official blue-white soccer-inspired jersey crop, denim and sneakers detail, outdoor cafe phone-in-hand moment, car mirror selfie, navy/white outfit flat-lay, soft red accessory. Use clean photo-strip spacing or subtle overlaps, real UGC texture.\n\nProduct: the TORRAS USA case appears across the collage and must match reference: transparent blue frame, red dotted side anti-slip grip, blue-white-red star and wave/stripe back plate, metallic silver/light-gold Ostand ring with red/blue line details. Ostand closed in hand/pocket/flat-lay moments.\n\nOutfits: navy, white, light denim, soft red accent, silver accessories, casual summer blockcore, no official crests or logos.\n\nComposition: square crop, phone case visible in every mini-moment, all cases combined about 35%-50% of image. First read: everyday wardrobe matching ideas. Second read: USA colorway case as the styling anchor.\n\nAvoid poster, chart, educational diagram, animals, fossils, official USA crest, sportswear logo, fake logos, player likeness, celebrity likeness, watermark, distorted phone case, wrong colors, distorted hands, extra fingers, Portugal red-green environment, product catalog style, studio white background, messy scrapbook, excessive text overlay.`]
+        ]
+      },
+      {
+        sku: "美国队款", direction: "扫光动态感视觉", badge: "blue", refs: refs.usa,
+        title: "新增｜扫光动态感视觉｜美国队款",
+        prompts: [
+          ["扫光动态感视觉", `Use the uploaded TORRAS USA blue-red-white phone case reference strictly. Generate one square 1:1 premium photorealistic ad visual with dynamic side-view lighting.\n\nConcept: limited-edition scarcity visual. Product side and back three-quarter angle with a sweeping light beam across the blue transparent frame and red side grip, creating motion, urgency, and a collector feeling. No official USA soccer crest, federation badge, or team logo.\n\nProduct: TORRAS USA case must match the reference: transparent blue frame, red dotted anti-slip side grip, blue-white-red star and wave/stripe back plate, metallic silver/light-gold circular Ostand ring with red/blue line details, visible side buttons and camera cutout. Highlight side/profile thickness, grip texture, frame translucency, and Ostand ring. Ostand closed unless the back angle naturally shows the ring.\n\nScene/background: dark navy cinematic background with subtle red and white light streaks, premium match-night energy, controlled sweeping highlight across product edge. Product sharp, light trail dynamic but not messy.\n\nText: include exactly the words "Limited Edition 2026" in small refined typography, placed in clean negative space. No other text.\n\nComposition: square crop, product occupies 45%-60% of image. Premium scarcity mood, limited drop feeling, missed-it-and-it-is-gone energy.\n\nAvoid infographic, chart, educational diagram, animals, fossils, official USA crest, sportswear logo, fake logos, player likeness, celebrity likeness, watermark, distorted phone case, wrong colors, extra fingers, Portugal red-green environment, cheap neon, clutter, white studio background, excessive text.`]
+        ]
+      }
+    );
+
+    groups.push(
+      {
+        sku: "葡萄牙红绿款", direction: "OOTD 2-3屏分屏广告", badge: "green", refs: refs.redgreen,
+        title: "新增｜OOTD 2-3屏分屏广告｜葡萄牙红绿款",
+        prompts: [
+          ["2-3屏 OOTD 广告", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 photorealistic Instagram/Facebook ad visual for OOTD styling.\n\nCore concept: clean 2-panel or 3-panel split-screen OOTD ad, not a busy collage. The image should feel organized, premium, and immediately readable for paid social.\n\nRequired panels:\n1) Hand-held phone selfie OOTD panel: a stylish adult taking a mirror, window, or arm-length selfie while holding the phone. The outfit should be visible enough to read the styling, with red/green accents, denim, white tee, muted green overshirt, burgundy cap, sneakers, or tailored casual pieces.\n2) Flat-lay outfit panel: the full outfit and the phone are placed together on a tasteful surface, such as denim, jersey fabric, sneakers, sunglasses, cap, tote, or cafe table. The phone case should sit naturally with the clothes, not isolated like catalog photography.\n3) Optional detail panel: a close lifestyle product angle or hand-held crop that shows the case with a different size and angle from the first two panels.\n\nProduct variation by panel: keep the same TORRAS Portugal red-green case accurate in every panel: transparent red frame, green dotted side grip, warm red upper back fading into deep green lower back, fine vertical gold lines, metallic gold circular Ostand ring with red/green details, white corner markings. Vary phone scale and direction: selfie panel phone about 10%-18% of that panel, flat-lay panel phone about 22%-35% of that panel, detail panel phone about 35%-55% of that panel. Use different angles such as vertical hand-held, diagonal flat-lay, and slight three-quarter tilt. Ostand closed unless the phone is deliberately shown standing.\n\nComposition: 2-3 clear screens only, clean gutters, editorial ad layout, square crop, no more than 3 visual panels. First read: OOTD styling. Second read: the case as the outfit accessory.\n\nAvoid cluttered scrapbook, too many photos, infographic layout, heavy text, fake logos, player likeness, celebrity likeness, watermark, distorted phone case, wrong SKU colors, distorted hands, extra fingers, white studio product catalog.`]
+        ]
+      },
+      {
+        sku: "葡萄牙红款", direction: "OOTD 2-3屏分屏广告", badge: "", refs: refs.red,
+        title: "新增｜OOTD 2-3屏分屏广告｜葡萄牙红款",
+        prompts: [
+          ["2-3屏 OOTD 广告", `Use the uploaded TORRAS Portugal red/pink phone case reference strictly. Generate one square 1:1 photorealistic Instagram/Facebook ad visual for refined OOTD styling.\n\nCore concept: clean 2-panel or 3-panel split-screen OOTD ad, not a busy collage. It should be easy to understand in paid social and feel like a polished fashion accessory ad.\n\nRequired panels:\n1) Hand-held phone selfie OOTD panel: a stylish adult taking a mirror, window, or arm-length selfie while holding the phone. Outfit direction: cream, soft burgundy, pale pink, muted green, light denim, tailored casual pieces, simple jewelry, no visible brand logos.\n2) Flat-lay outfit panel: this outfit and the phone are laid together on a refined surface, such as cream knit, denim, tote, sunglasses, soft green accent item, cafe table, or creator desk. The phone should feel styled with the clothes.\n3) Optional detail panel: a close lifestyle product crop or hand-held angle showing the case from a different direction.\n\nProduct variation by panel: keep the TORRAS Portugal red/pink case accurate: transparent wine-red/rose-red frame, soft pale pink back plate, green dotted anti-slip side grip, gold buttons, gold metallic Ostand ring with red/green line details, delicate wave texture. Vary phone scale and direction: selfie panel phone about 10%-18% of that panel, flat-lay panel phone about 22%-35%, detail panel phone about 35%-55%. Use different angles such as vertical hand-held, diagonal flat-lay, and a slight three-quarter product tilt. Ostand closed unless intentionally used as a stand.\n\nComposition: 2-3 clear screens only, clean gutters, premium creator mood, square crop. First read: refined outfit. Second read: phone case as a soft fashion accessory.\n\nAvoid cluttered scrapbook, too many photos, infographic layout, heavy text, fake logos, player likeness, celebrity likeness, watermark, distorted phone case, wrong SKU colors, distorted hands, extra fingers, white studio product catalog.`]
+        ]
+      },
+      {
+        sku: "美国队款", direction: "OOTD 2-3屏分屏广告", badge: "blue", refs: refs.usa,
+        title: "新增｜OOTD 2-3屏分屏广告｜美国队款",
+        prompts: [
+          ["2-3屏 OOTD 广告", `Use the uploaded TORRAS USA blue-red-white phone case reference strictly. Generate one square 1:1 photorealistic Instagram/Facebook ad visual for OOTD styling.\n\nCore concept: clean 2-panel or 3-panel split-screen OOTD ad, not a busy collage. The ad should be readable, sporty, and suitable for paid social.\n\nRequired panels:\n1) Hand-held phone selfie OOTD panel: a stylish adult taking a mirror, window, or arm-length selfie while holding the phone. Outfit direction: navy, white, light denim, soft red accent, silver accessories, casual summer blockcore, non-official soccer-inspired details.\n2) Flat-lay outfit panel: the same outfit and the phone are placed together on denim, white tee, sneakers, cap, sunglasses, cafe table, or car seat. The phone should look naturally styled with the outfit.\n3) Optional detail panel: a closer case angle or hand-held crop with a different scale and direction from the first two panels.\n\nProduct variation by panel: keep the TORRAS USA case accurate: transparent blue frame, red dotted side anti-slip grip, blue-white-red star and wave/stripe back plate, metallic silver/light-gold Ostand ring with red/blue line details. Vary phone scale and direction: selfie panel phone about 10%-18% of that panel, flat-lay panel phone about 22%-35%, detail panel phone about 35%-55%. Use different angles such as vertical hand-held, diagonal flat-lay, and slight three-quarter tilt. Ostand closed unless intentionally used as a stand.\n\nComposition: 2-3 clear screens only, clean gutters, square crop, organized ad layout. First read: OOTD styling. Second read: USA colorway case as the accessory anchor.\n\nAvoid official USA soccer crest, federation badge, sportswear logo, cluttered scrapbook, too many photos, infographic layout, heavy text, fake logos, player likeness, celebrity likeness, watermark, distorted phone case, wrong SKU colors, distorted hands, extra fingers, Portugal red-green environment, white studio product catalog.`]
+        ]
+      },
+      {
+        sku: "葡萄牙红绿款", direction: "精致穿搭高端商业广告", badge: "green", refs: refs.redgreen,
+        title: "新增｜精致穿搭高端商业广告｜葡萄牙红绿款",
+        prompts: [
+          ["1 封面 Hook", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. Portugal red-green case, refined outfit high-end commercial direction, carousel image 1 cover Hook.\n\nConcept: luxury commercial campaign cover, more polished and staged than UGC. The first read should be an expensive refined OOTD ad, with the phone case as the fashion accessory anchor.\n\nScene: high-end boutique hotel lobby, minimalist gallery corridor, marble stair, luxury cafe terrace, designer studio doorway, or warm architectural interior. Controlled natural light mixed with soft commercial key light, clean shadows, premium materials, no visible brand logos.\n\nSubject/action: one stylish adult model in refined Portugal-inspired styling: tailored cream trousers, muted green knit or overshirt, burgundy accent, crisp white layer, polished shoes, subtle jewelry. Posed is acceptable: elegant mirror selfie, seated editorial pose with phone in hand, or walking campaign pose. Face not dominant.\n\nPhone case: ${caseDetails.redgreen} Phone case 12%-22% of image if hand-held. Ostand closed. Make it clearly visible and premium.\n\nComposition: campaign-cover framing, elegant negative space, magazine-level styling, expensive color grading, product visible within 3 seconds.\n\n${NEG} Avoid casual messy UGC, cheap neon, white e-commerce background.`],
+          ["2 场景代入", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. Portugal red-green case, refined outfit high-end commercial direction, carousel image 2 scene immersion.\n\nScene: luxury cafe table, boutique hotel lounge, gallery lobby, designer studio, marble vanity, or architectural corridor. It should feel like a staged premium lifestyle campaign, with controlled lighting and tactile materials.\n\nAction: show the model naturally using the phone inside the high-end scene: checking a message before leaving, reviewing a shot list, taking a refined mirror selfie, or holding the phone while seated with the outfit visible. Posed is acceptable, but not stiff mannequin.\n\nPhone case: ${caseDetails.redgreen} Phone case 18%-28% of image, clearly readable, Ostand closed because hand-held or resting flat.\n\nComposition: premium scene and outfit first, product second, refined commercial polish, no visible brand logos.\n\n${NEG} Avoid casual messy UGC, fake logos, distorted hands, wrong SKU colors.`],
+          ["3 产品卖点", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. Portugal red-green case, refined outfit high-end commercial direction, carousel image 3 premium product selling point.\n\nScene: luxury flat-lay or foreground product detail on marble, brushed metal, cream fabric, muted green knit, burgundy leather accent, designer desk, or gallery bench. Commercial ad lighting, soft controlled shadows, premium tactile surface.\n\nProduct: TORRAS Portugal red-green case is the hero and occupies about 45%-60% of the image. Show the back clearly and accurately: ${caseDetails.redgreen} Ostand closed and flat. Highlight the transparent red frame, green side grip, gold ring, vertical gold line pattern, and refined color transition.\n\nContext: include subtle refined outfit cues nearby, such as sleeve, polished shoe edge, sunglasses, notebook, or fabric texture. No visible logos.\n\nMood: extremely high-end product accessory ad, crisp, expensive, campaign-ready.\n\n${NEG} Avoid white catalog background, wrong colors, distorted phone case.`],
+          ["4 高级玩法", `Use the uploaded TORRAS Portugal red-green phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. Portugal red-green case, refined outfit high-end commercial direction, carousel image 4 premium Ostand usage.\n\nScene: boutique hotel desk, luxury cafe table, gallery bench, designer studio surface, or marble vanity with refined outfit elements nearby. Controlled commercial lighting, premium materials, no visible logos.\n\nUse case: show the phone case with Ostand open as a stable premium stand for elegant outfit selfie framing, video call, content review, or filming refined outfit details. Ostand must be open with realistic hinge structure and stable support.\n\nProduct: ${caseDetails.redgreen} Product 30%-45% of image, sharp and accurate. Make the stand function feel luxurious, useful, and campaign-worthy.\n\nComposition: refined product-use ad, elegant negative space, premium accessory mood, not casual desk clutter.\n\n${NEG} Avoid impossible Ostand hinge, cheap neon, white e-commerce background.`]
+        ]
+      },
+      {
+        sku: "葡萄牙红款", direction: "精致穿搭高端商业广告", badge: "", refs: refs.red,
+        title: "新增｜精致穿搭高端商业广告｜葡萄牙红款",
+        prompts: [
+          ["1 封面 Hook", `Use the uploaded TORRAS Portugal red/pink phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. Portugal red/pink case, refined outfit high-end commercial direction, carousel image 1 cover Hook.\n\nConcept: luxury commercial campaign cover for a soft fashion-forward phone case. The first read should be an elegant refined OOTD ad, with the case styled like a premium accessory.\n\nScene: boutique hotel room, minimalist gallery lobby, warm luxury cafe entrance, marble vanity, designer studio doorway, or elegant city street. Controlled natural light, soft commercial key light, polished shadows, premium surfaces, no visible brand logos.\n\nSubject/action: one stylish adult model wearing cream, pale pink, soft burgundy, muted green, light denim, tailored neutrals, silk scarf, refined jewelry, or polished shoes. Posed is acceptable: seated with phone in hand, elegant mirror selfie, editorial walking pose, or hand resting on a styled table with the phone visible. Face not dominant.\n\nPhone case: ${caseDetails.red} Phone case 12%-22% of image if hand-held. Ostand closed. Keep the soft pink/wine-red/gold details accurate and premium.\n\nComposition: campaign-cover framing, soft luxury color grading, elegant negative space, product visible within 3 seconds.\n\n${NEG} Avoid casual messy UGC, cheap neon, white e-commerce background.`],
+          ["2 场景代入", `Use the uploaded TORRAS Portugal red/pink phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. Portugal red/pink case, refined outfit high-end commercial direction, carousel image 2 scene immersion.\n\nScene: warm luxury cafe table, boutique hotel lounge, gallery lobby, designer studio, marble vanity, or refined city doorway. It should feel staged and expensive, with tactile fabrics and polished commercial lighting.\n\nAction: show the model using the phone as part of a refined lifestyle moment: checking a message before leaving, taking an elegant mirror outfit selfie, reviewing content, or holding the phone while seated with the outfit visible. Posed is acceptable, but keep it believable.\n\nPhone case: ${caseDetails.red} Phone case 18%-28% of image, clearly readable, Ostand closed because hand-held or resting flat.\n\nComposition: refined scene first, soft fashion accessory second, premium ad polish, no visible logos.\n\n${NEG} Avoid casual messy UGC, fake logos, distorted hands, wrong SKU colors.`],
+          ["3 产品卖点", `Use the uploaded TORRAS Portugal red/pink phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. Portugal red/pink case, refined outfit high-end commercial direction, carousel image 3 premium product selling point.\n\nScene: luxury flat-lay or foreground product detail on marble, cream knit, pale pink fabric, soft burgundy leather, muted green accent, brushed metal, designer desk, or boutique vanity. Commercial ad lighting with soft controlled shadows.\n\nProduct: TORRAS Portugal red/pink case is the hero and occupies about 45%-60% of the image. Show the back clearly and accurately: ${caseDetails.red} Ostand closed and flat. Highlight the wine-red transparent frame, pale pink back, green side grip, gold buttons, gold ring, and delicate wave texture.\n\nContext: include refined outfit cues nearby, such as silk scarf, sleeve, jewelry, sunglasses, notebook, or tactile fabric. No visible logos.\n\nMood: high-end fashion accessory ad, soft, expensive, campaign-ready.\n\n${NEG} Avoid white catalog background, wrong colors, distorted phone case.`],
+          ["4 高级玩法", `Use the uploaded TORRAS Portugal red/pink phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. Portugal red/pink case, refined outfit high-end commercial direction, carousel image 4 premium Ostand usage.\n\nScene: boutique hotel desk, luxury cafe table, gallery bench, designer studio surface, marble vanity, or refined creator setup with cream/burgundy/muted green outfit elements nearby. Controlled commercial lighting, premium materials, no visible logos.\n\nUse case: show the TORRAS Portugal red/pink case with Ostand open as a stable premium stand for elegant outfit selfie framing, video call, content review, or filming refined outfit details. Ostand must be open with realistic hinge structure and stable support.\n\nProduct: ${caseDetails.red} Product 30%-45% of image, sharp and accurate. The stand function should feel luxurious, useful, and styled.\n\nComposition: refined product-use ad, elegant negative space, soft premium accessory mood, not casual desk clutter.\n\n${NEG} Avoid impossible Ostand hinge, cheap neon, white e-commerce background.`]
+        ]
+      },
+      {
+        sku: "美国队款", direction: "精致穿搭高端商业广告", badge: "blue", refs: refs.usa,
+        title: "新增｜精致穿搭高端商业广告｜美国队款",
+        prompts: [
+          ["1 封面 Hook", `Use the uploaded TORRAS USA blue-red-white phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. USA case, refined outfit high-end commercial direction, carousel image 1 cover Hook.\n\nConcept: luxury commercial campaign cover with polished styling, not casual UGC. The first read should be refined sporty fashion, with the USA colorway case as a premium accessory rather than fan merch clutter.\n\nScene: modern gallery corridor, high-end cafe terrace, clean architectural street corner, boutique hotel lobby, designer studio doorway, or premium city interior. Controlled natural light, soft commercial key light, polished shadows, refined blue-white-red accents, no visible brand logos.\n\nSubject/action: one stylish adult model wearing navy, crisp white, light denim, soft red accent, silver accessories, tailored casual pieces, or a non-official soccer-inspired top without crest or logo. Posed is acceptable: elegant mirror selfie, seated editorial pose with phone in hand, walking campaign pose, or foreground hand-held phone with outfit behind it. Face not dominant.\n\nPhone case: ${caseDetails.usa} Phone case 12%-22% of image if hand-held. Ostand closed. Keep the blue frame, red grip, star/wave back, and ring details accurate.\n\nComposition: campaign-cover framing, elegant negative space, premium color grading, product visible within 3 seconds.\n\n${NEG} Avoid official USA soccer crest, sportswear logo, Portugal red-green environment, white e-commerce background.`],
+          ["2 场景代入", `Use the uploaded TORRAS USA blue-red-white phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. USA case, refined outfit high-end commercial direction, carousel image 2 scene immersion.\n\nScene: high-end cafe table, gallery lobby, designer studio, premium car interior, clean architectural street corner, or boutique hotel lounge. Controlled commercial lighting, polished shadows, refined navy/white/red accents, no visible logos.\n\nAction: show the model naturally using the phone in a premium lifestyle moment: checking content, taking an elegant mirror outfit selfie, reviewing a shot, or holding the phone while seated with the outfit visible. Posed is acceptable but should feel expensive and composed.\n\nPhone case: ${caseDetails.usa} Phone case 18%-28% of image, clearly readable, Ostand closed because hand-held or resting flat.\n\nComposition: refined scene and outfit first, USA case second, campaign-ready commercial polish.\n\n${NEG} Avoid official USA crest, federation badge, sportswear logo, distorted hands, wrong SKU colors.`],
+          ["3 产品卖点", `Use the uploaded TORRAS USA blue-red-white phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. USA case, refined outfit high-end commercial direction, carousel image 3 premium product selling point.\n\nScene: luxury flat-lay or foreground product detail on navy fabric, crisp white shirt, light denim, brushed metal, silver jewelry, soft red accessory, designer desk, or gallery bench. Commercial ad lighting with clean controlled shadows.\n\nProduct: TORRAS USA case is the hero and occupies about 45%-60% of the image. Show the back clearly and accurately: ${caseDetails.usa} Ostand closed and flat. Highlight the transparent blue frame, red side grip, blue-white-red star/wave back plate, and metallic ring detail.\n\nContext: include refined outfit cues nearby, such as sleeve, sunglasses, jewelry, polished shoe edge, notebook, or denim texture. No visible logos.\n\nMood: premium sporty fashion accessory ad, crisp, expensive, campaign-ready.\n\n${NEG} Avoid official USA crest, white catalog background, wrong colors, distorted phone case.`],
+          ["4 高级玩法", `Use the uploaded TORRAS USA blue-red-white phone case reference strictly. Generate one square 1:1 ultra-premium photorealistic fashion advertising visual. USA case, refined outfit high-end commercial direction, carousel image 4 premium Ostand usage.\n\nScene: high-end cafe table, gallery bench, designer studio surface, premium desk, or boutique hotel lounge with navy, crisp white, light denim, silver, and soft red outfit elements nearby. Controlled commercial lighting, premium materials, no visible logos.\n\nUse case: show the TORRAS USA case with Ostand open as a stable premium stand for elegant outfit selfie framing, video call, content review, or filming refined outfit details. Ostand must be open with realistic hinge structure and stable support.\n\nProduct: ${caseDetails.usa} Product 30%-45% of image, sharp and accurate. The stand function should feel polished, useful, and premium.\n\nComposition: refined product-use ad, elegant negative space, high-end sporty accessory mood, not casual desk clutter.\n\n${NEG} Avoid official USA crest, federation badge, impossible Ostand hinge, Portugal red-green environment, white e-commerce background.`]
+        ]
+      }
+    );
+
+    ["穿搭 OOTD 拼贴", "扫光动态感视觉", "OOTD 2-3屏分屏广告", "精致穿搭高端商业广告"].forEach((direction) => {
+      const select = document.getElementById("directionFilter");
+      if (select && !Array.from(select.options).some((option) => option.value === direction)) {
+        const option = document.createElement("option");
+        option.value = direction;
+        option.textContent = direction;
+        select.appendChild(option);
+      }
+    });
+
+    function render() {
+      const root = document.getElementById("groups");
+      root.innerHTML = "";
+      const skuFilter = document.getElementById("skuFilter").value;
+      const directionFilter = document.getElementById("directionFilter").value;
+      groups
+        .filter(g => (!skuFilter || g.sku === skuFilter) && (!directionFilter || g.direction === directionFilter))
+        .forEach((group, groupIndex) => {
+          const section = document.createElement("section");
+          section.className = "group";
+          section.dataset.sku = group.sku;
+          section.dataset.direction = group.direction;
+          const refsHtml = group.refs.map(src => `
+            <div class="ref">
+              <img src="${src}" alt="${src}">
+              <div>${src}</div>
+            </div>
+          `).join("");
+          const cardsHtml = group.prompts.map((p, promptIndex) => {
+            const id = `prompt-${groupIndex}-${promptIndex}`;
+            return `
+              <article class="card">
+                <div class="card-head">
+                  <h3>${p[0]}</h3>
+                  <span class="badge ${group.badge}">${group.direction}</span>
+                </div>
+                <textarea id="${id}" readonly>${p[1]}</textarea>
+                <div class="actions">
+                  <button data-select="${id}">选中文本</button>
+                  <button class="primary" data-copy="${id}">复制提示词</button>
+                </div>
+              </article>
+            `;
+          }).join("");
+          section.innerHTML = `
+            <div class="group-head">
+              <div>
+                <h2>${group.title}</h2>
+                <div class="meta">SKU：${group.sku}　方向：${group.direction}　参考图：${group.refs.join(" / ")}</div>
+              </div>
+              <div class="refs">${refsHtml}</div>
+            </div>
+            <div class="cards">${cardsHtml}</div>
+          `;
+          root.appendChild(section);
+        });
+    }
+
+    document.addEventListener("click", async (event) => {
+      const copyId = event.target.dataset.copy;
+      const selectId = event.target.dataset.select;
+      if (copyId) {
+        const textarea = document.getElementById(copyId);
+        try {
+          await navigator.clipboard.writeText(textarea.value);
+          const old = event.target.textContent;
+          event.target.textContent = "已复制";
+          setTimeout(() => event.target.textContent = old, 900);
+        } catch {
+          textarea.focus();
+          textarea.select();
+        }
+      }
+      if (selectId) {
+        const textarea = document.getElementById(selectId);
+        textarea.focus();
+        textarea.select();
+      }
+    });
+    document.getElementById("skuFilter").addEventListener("change", render);
+    document.getElementById("directionFilter").addEventListener("change", render);
+    document.getElementById("resetFilters").addEventListener("click", () => {
+      document.getElementById("skuFilter").value = "";
+      document.getElementById("directionFilter").value = "";
+      render();
+    });
+    render();
+  </script>
+</body>
+</html>
