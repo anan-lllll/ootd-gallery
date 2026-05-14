@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>QAir Summer HTML Index</title>
+  <title>QAir 夏季网页汇总</title>
   <style>
     :root {
       color-scheme: light;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
       color: #17202a;
       background: #f7f6f2;
     }
@@ -20,21 +20,58 @@
     main {
       width: min(980px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 48px 0;
+      padding: 44px 0 56px;
+    }
+
+    header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
     }
 
     h1 {
       margin: 0 0 10px;
-      font-size: clamp(28px, 5vw, 48px);
+      font-size: clamp(30px, 5vw, 48px);
       line-height: 1.08;
       letter-spacing: 0;
     }
 
     p {
-      margin: 0 0 28px;
+      margin: 0;
       max-width: 720px;
       color: #52606d;
       line-height: 1.6;
+    }
+
+    .language-switch {
+      display: inline-flex;
+      flex: 0 0 auto;
+      overflow: hidden;
+      border: 1px solid #d8d4ca;
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    button {
+      min-width: 72px;
+      padding: 9px 12px;
+      border: 0;
+      border-right: 1px solid #d8d4ca;
+      background: transparent;
+      color: #52606d;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:last-child {
+      border-right: 0;
+    }
+
+    button[aria-pressed="true"] {
+      background: #17202a;
+      color: #ffffff;
     }
 
     ul {
@@ -70,56 +107,136 @@
       color: #66717d;
       font-size: 13px;
     }
+
+    @media (max-width: 640px) {
+      header {
+        display: grid;
+      }
+
+      .language-switch {
+        width: max-content;
+      }
+    }
   </style>
 </head>
 <body>
   <main>
-    <h1>QAir Summer HTML Index</h1>
-    <p>Published copies of the HTML files from the QAir summer folder. Each link opens as a standalone web page.</p>
+    <header>
+      <div>
+        <h1 data-i18n="title">QAir 夏季网页汇总</h1>
+        <p data-i18n="intro">这里集中放置 QAir 夏季项目和 OOTD 相关页面。点击任意卡片即可在浏览器中打开对应网页。</p>
+      </div>
+      <div class="language-switch" aria-label="Language switch">
+        <button type="button" data-lang="zh" aria-pressed="true">中文</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </header>
+
     <ul>
       <li>
         <a href="site/">
-          <strong>QAir Summer Site</strong>
-          <span>site/index.html</span>
+          <strong data-i18n="qairSiteTitle">QAir 夏季独立站页面</strong>
+          <span data-i18n="qairSitePath">site/index.html</span>
         </a>
       </li>
       <li>
         <a href="q3-air-summer-gallery/">
-          <strong>Q3 Air Summer Gallery</strong>
-          <span>q3-air-summer-gallery/index.html</span>
+          <strong data-i18n="q3GalleryTitle">Q3 Air 夏季生成图分类看板</strong>
+          <span data-i18n="q3GalleryPath">q3-air-summer-gallery/index.html</span>
         </a>
       </li>
       <li>
         <a href="https://anan-lllll.github.io/ootd-gallery/">
-          <strong>OOTD Gallery</strong>
+          <strong data-i18n="ootdGalleryTitle">OOTD 图片分类看板</strong>
           <span>https://anan-lllll.github.io/ootd-gallery/</span>
         </a>
       </li>
       <li>
         <a href="ootd-prompt-library/stage2_ootd_prompt_library.html">
-          <strong>Stage 2 OOTD Prompt Library</strong>
-          <span>ootd-prompt-library/stage2_ootd_prompt_library.html</span>
+          <strong data-i18n="ootdPromptTitle">第二阶段 OOTD 提示词库</strong>
+          <span data-i18n="ootdPromptPath">ootd-prompt-library/stage2_ootd_prompt_library.html</span>
         </a>
       </li>
       <li>
         <a href="gemini-gems-training/">
-          <strong>Gemini Gems Training</strong>
-          <span>gemini-gems-training/index.html</span>
+          <strong data-i18n="geminiTitle">Gemini Gems 内部分享课程</strong>
+          <span data-i18n="geminiPath">gemini-gems-training/index.html</span>
         </a>
       </li>
       <li>
         <a href="reference-selection/Q3AirSummer_%E5%8F%82%E8%80%83%E6%96%B9%E5%90%91%E5%8F%AF%E8%A7%86%E5%8C%96.html">
-          <strong>Reference Direction Visualization</strong>
-          <span>reference-selection/Q3AirSummer_reference-direction-visualization.html</span>
+          <strong data-i18n="referenceTitle">Q3 Air 夏季参考方向可视化</strong>
+          <span data-i18n="referencePath">reference-selection/Q3AirSummer_reference-direction-visualization.html</span>
         </a>
       </li>
       <li>
         <a href="reference-selection/Q3AirSummer_%E7%8B%AC%E7%AB%8B%E7%AB%99%E9%85%8D%E5%9B%BE%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%BA%93_%E5%8F%AF%E5%A4%8D%E5%88%B6.html">
-          <strong>Copyable Prompt Library</strong>
-          <span>reference-selection/Q3AirSummer_copyable-prompt-library.html</span>
+          <strong data-i18n="copyPromptTitle">Q3 Air 独立站配图提示词库</strong>
+          <span data-i18n="copyPromptPath">reference-selection/Q3AirSummer_copyable-prompt-library.html</span>
         </a>
       </li>
     </ul>
   </main>
+
+  <script>
+    const copy = {
+      zh: {
+        title: "QAir 夏季网页汇总",
+        intro: "这里集中放置 QAir 夏季项目和 OOTD 相关页面。点击任意卡片即可在浏览器中打开对应网页。",
+        qairSiteTitle: "QAir 夏季独立站页面",
+        qairSitePath: "site/index.html",
+        q3GalleryTitle: "Q3 Air 夏季生成图分类看板",
+        q3GalleryPath: "q3-air-summer-gallery/index.html",
+        ootdGalleryTitle: "OOTD 图片分类看板",
+        ootdPromptTitle: "第二阶段 OOTD 提示词库",
+        ootdPromptPath: "ootd-prompt-library/stage2_ootd_prompt_library.html",
+        geminiTitle: "Gemini Gems 内部分享课程",
+        geminiPath: "gemini-gems-training/index.html",
+        referenceTitle: "Q3 Air 夏季参考方向可视化",
+        referencePath: "reference-selection/Q3AirSummer_reference-direction-visualization.html",
+        copyPromptTitle: "Q3 Air 独立站配图提示词库",
+        copyPromptPath: "reference-selection/Q3AirSummer_copyable-prompt-library.html"
+      },
+      en: {
+        title: "QAir Summer HTML Index",
+        intro: "A central index for QAir summer project pages and OOTD reference pages. Click any card to open the page in your browser.",
+        qairSiteTitle: "QAir Summer Site",
+        qairSitePath: "site/index.html",
+        q3GalleryTitle: "Q3 Air Summer Image Gallery",
+        q3GalleryPath: "q3-air-summer-gallery/index.html",
+        ootdGalleryTitle: "OOTD Image Gallery",
+        ootdPromptTitle: "Stage 2 OOTD Prompt Library",
+        ootdPromptPath: "ootd-prompt-library/stage2_ootd_prompt_library.html",
+        geminiTitle: "Gemini Gems Internal Training",
+        geminiPath: "gemini-gems-training/index.html",
+        referenceTitle: "Q3 Air Summer Reference Direction",
+        referencePath: "reference-selection/Q3AirSummer_reference-direction-visualization.html",
+        copyPromptTitle: "Q3 Air Site Image Prompt Library",
+        copyPromptPath: "reference-selection/Q3AirSummer_copyable-prompt-library.html"
+      }
+    };
+
+    const nodes = document.querySelectorAll("[data-i18n]");
+    const buttons = document.querySelectorAll("[data-lang]");
+
+    function applyLanguage(lang) {
+      const selected = copy[lang] ? lang : "zh";
+      document.documentElement.lang = selected === "zh" ? "zh-CN" : "en";
+      document.title = copy[selected].title;
+      nodes.forEach((node) => {
+        node.textContent = copy[selected][node.dataset.i18n];
+      });
+      buttons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.lang === selected));
+      });
+      localStorage.setItem("qair-index-language", selected);
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+
+    applyLanguage(localStorage.getItem("qair-index-language") || "zh");
+  </script>
 </body>
 </html>
