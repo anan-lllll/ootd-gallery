@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Q3 Air Summer 独立站配图提示词库</title>
+  <style>
+    :root {
+      --bg: #f7f6f1;
+      --paper: #ffffff;
+      --ink: #18201d;
+      --muted: #66706b;
+      --line: #dfe5df;
+      --teal: #079c9d;
+      --lime: #dce875;
+      --coral: #f06f45;
+      --code: #111816;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 42px 28px 72px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      align-items: end;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 52px;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .global {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .global-card {
+      padding: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .global-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+
+    .global-card span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      margin: 20px -28px 0;
+      padding: 12px 28px;
+      background: rgba(247, 246, 241, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    nav a {
+      display: inline-block;
+      margin-right: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: #fff;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .section {
+      margin-top: 34px;
+      padding: 24px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #eef8f6;
+      color: #086c6d;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .badge.orange {
+      background: #fff1e9;
+      color: #a54823;
+    }
+
+    .copy {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--ink);
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .copy:hover { background: #2b3632; }
+
+    .cols {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 18px;
+    }
+
+    .refs,
+    .check {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+    }
+
+    .refs h3,
+    .check h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+
+    .refs ul,
+    .check ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .refs li,
+    .check li { margin: 8px 0; }
+
+    code.path {
+      display: block;
+      margin-top: 3px;
+      padding: 7px 8px;
+      border-radius: 6px;
+      background: #eef1ee;
+      color: #26302c;
+      font-size: 12px;
+      word-break: break-all;
+      white-space: normal;
+    }
+
+    pre {
+      margin: 18px 0 0;
+      padding: 18px;
+      border-radius: 8px;
+      background: var(--code);
+      color: #eef8f3;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 13px;
+      line-height: 1.55;
+      overflow-x: auto;
+    }
+
+    .note {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-left: 5px solid var(--coral);
+      background: #fffaf6;
+      color: var(--muted);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 160ms ease, transform 160ms ease;
+      pointer-events: none;
+      font-size: 14px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      header,
+      .global,
+      .cols {
+        grid-template-columns: 1fr;
+      }
+
+      h1 { font-size: 38px; }
+
+      .section-head {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Q3 Air Summer 独立站配图提示词库</h1>
+      </div>
+      <p class="intro">按官网页面模块整理：每张图包含比例、参考图路径、完整 prompt 和验收点。点击“复制提示词”即可直接粘贴到 ChatGPT 图片生成里。</p>
+    </header>
+
+    <div class="global">
+      <div class="global-card">
+        <strong>统一方向</strong>
+        <span>城市轻行动、清爽夏日、creator lifestyle、轻户外边界、随身装备感。</span>
+      </div>
+      <div class="global-card">
+        <strong>参考图规则</strong>
+        <span>人物图只控穿搭/构图/光线/姿态，不复制脸；产品图严格控制结构和颜色。</span>
+      </div>
+      <div class="global-card">
+        <strong>全局避免</strong>
+        <span>暗调、AI 磨皮、假笑、海边辣妹、硬核户外、黑色厚重防摔壳。</span>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#hero">01 Hero</a>
+      <a href="#rotation">02 旋转前导</a>
+      <a href="#color">03 配色理念</a>
+      <a href="#features">04 卖点总览</a>
+      <a href="#airbag">05 气囊结构</a>
+      <a href="#creator">06 Creator City</a>
+      <a href="#roadtrip">07 Road Trip</a>
+      <a href="#trail">08 Weekend Trail</a>
+      <a href="#park">09 Park Social</a>
+      <a href="#grip">10 握持侧边</a>
+      <a href="#stand">11 支架内容</a>
+      <a href="#magsafe">12 磁吸</a>
+      <a href="#carry">13 Everyday Carry</a>
+    </nav>
+
+    <section class="section" id="hero">
+      <div class="section-head">
+        <div>
+          <h2>01 首屏主视觉 Hero</h2>
+          <div class="meta"><span class="badge">16:9</span><span class="badge orange">1920x1080 / 2048x1152</span><span class="badge">主视觉</span></div>
+        </div>
+        <button class="copy" data-copy="prompt-hero">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs">
+          <h3>参考图</h3>
+          <ul>
+            <li>场景/高级感参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\SPRING-SUMMER 23.jpg</code></li>
+            <li>穿搭/姿态参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\SPRING-SUMMER 23 2.jpg</code></li>
+            <li>产品参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li>
+          </ul>
+        </div>
+        <div class="check">
+          <h3>验收点</h3>
+          <ul>
+            <li>能撑独立站首屏，而不是素材图库。</li>
+            <li>安静、有留白、低饱和但不暗。</li>
+            <li>手机壳是唯一更亮的色彩点。</li>
+          </ul>
+        </div>
+      </div>
+      <pre id="prompt-hero">Generate a horizontal 16:9 photorealistic website hero image for Q3 Air Summer, a lightweight protective phone case for city-to-outdoor summer days.
+
+Use the reference images only for wardrobe styling, composition, lighting direction, pose energy, and scene mood. Do not copy or preserve the face, identity, hairstyle, facial features, or exact body of any reference person. Create a new fictional adult model with a different face and different hairstyle. Face should not be dominant.
+
+Scene:
+A quiet gallery-adjacent street, minimal cafe entrance, or design studio doorway that opens toward greenery. The environment is clean, calm, and lived-in, with natural daylight, refined surfaces, and enough negative space for website copy. It should feel like a premium creator lifestyle moment, not a stock commute photo.
+
+Subject:
+One stylish adult creator or design-minded user around 28-35 for a North American / European market. Outfit should be refined light outdoor / creator lifestyle: cream or warm neutral technical overshirt, ribbed tank, light denim or relaxed utility shorts/pants, minimal jewelry, small crossbody or sling bag, sunglasses optional. No visible brand logos.
+
+Action:
+The person is naturally checking a message while walking, adjusting a bag strap, or pausing at the doorway before heading out. The phone is used naturally, not held beside the face as a product pose.
+
+Phone case:
+Use the uploaded phone case reference strictly. The phone case should be clearly visible and match the reference structure, colors, camera cutout, side buttons/grip, and stand/ring details as much as possible. The case should be the only slightly brighter color accent, coordinated with the outfit and scene.
+
+Composition:
+Horizontal 16:9 crop, premium independent website hero. Candid mid-body or 3/4 body framing, clean negative space on one side for headline copy, layered depth, outfit and atmosphere are the first read; phone case is visible within 3 seconds.
+
+Lighting:
+Bright clean summer daylight, airy high-key natural light, soft open shade, clear whites, breathable shadows, low-to-medium contrast, fresh greens, pale sky blue, aqua teal, lime, citrus orange accents. Light, fresh, and breathable, not dark, moody, golden, or heavy.
+
+Model rendering:
+Realistic adult skin texture with natural pores and subtle imperfections, no plastic skin, no beauty filter, no over-smoothed face, no waxy AI skin. Natural candid expression, relaxed face, not a forced commercial smile.
+
+Avoid:
+poster, infographic, text overlay, fake logos, celebrity likeness, watermark, distorted phone case, wrong colors, distorted hands, extra fingers, product catalog style, studio white background, overly glossy fashion campaign look, stock-photo smile, teenage look, bikini, beach party, hard-core hiking gear, black rugged phone case, copied reference face.</pre>
+    </section>
+
+    <section class="section" id="rotation">
+      <div class="section-head">
+        <div><h2>02 产品旋转动画前导图</h2><div class="meta"><span class="badge">16:9</span><span class="badge orange">1920x1080 / 2048x1152</span><span class="badge">产品封面</span></div></div>
+        <button class="copy" data-copy="prompt-rotation">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>产品强参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li><li>实拍质感参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳实拍图\20260509-164039.475-4.jpg</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>产品形态接近参考图。</li><li>透明材质清爽，不廉价。</li><li>适合作为旋转动画开头。</li></ul></div>
+      </div>
+      <pre id="prompt-rotation">Generate a horizontal 16:9 premium product visual for Q3 Air Summer phone case, suitable as the opening frame of a product rotation section.
+
+Use the uploaded phone case reference strictly for structure, colors, camera cutout, translucent bumper, side buttons, grip texture, air-cushion corners, and ring stand/magnetic detail.
+
+Scene:
+A clean refined surface with soft natural daylight, subtle shadows, and minimal summer material cues such as pale stone, brushed metal, clear acrylic, or light fabric. No busy props.
+
+Subject:
+Two Q3 Air Summer phone cases, one aqua-lime colorway and one coral-blue/citrus colorway, arranged in a premium floating or angled product composition. The cases should feel lightweight, translucent, protective, and fresh.
+
+Composition:
+Horizontal 16:9, product large and centered with enough negative space around it. Slight 3/4 angle to show the bumper, corners, side buttons, and ring stand. Not a white-background catalog shot.
+
+Lighting:
+Bright clean summer daylight, crisp highlights on translucent material, soft breathable shadows, high clarity, low-to-medium contrast.
+
+Avoid:
+wrong phone case shape, black rugged case, bulky tactical case, fake logos, text overlay, watermark, cluttered props, dark moody background, excessive glow, cheap plastic look, distorted camera cutout, wrong ring stand.</pre>
+    </section>
+
+    <section class="section" id="color">
+      <div class="section-head">
+        <div><h2>03 个性配色设计理念图</h2><div class="meta"><span class="badge">16:9 / 4:3</span><span class="badge orange">1920x1080</span><span class="badge">色彩故事</span></div></div>
+        <button class="copy" data-copy="prompt-color">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>产品强参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li><li>色彩/静物氛围参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\Birkenstock Womens Boston Soft Footbed Suede Clog in Mocha, Womens at.jpg</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>解释夏日配色但不幼稚。</li><li>背景低饱和，壳子是亮点。</li><li>静物有设计感和真实材质。</li></ul></div>
+      </div>
+      <pre id="prompt-color">Generate a horizontal 16:9 photorealistic color story image for Q3 Air Summer phone case colorways.
+
+Use the phone case reference strictly for the two translucent summer colorways, ring stand shape, bumper structure, and material feel.
+
+Scene:
+A refined creator desk or minimal cafe table in bright natural daylight. Clean but lived-in: notebook, iced coffee, brushed metal key ring, sunglasses, pale stone, light denim fabric, soft cream knit sleeve, and a small citrus accent. Keep the scene quiet and uncluttered.
+
+Subject:
+The two Q3 Air Summer phone cases are placed naturally among the objects, one aqua-lime and one coral-blue/citrus. The cases should feel like thoughtfully designed summer gear, not candy props.
+
+Composition:
+Horizontal 16:9, top-down or low 3/4 angle. Strong spacing, clean negative areas, tactile materials. The cases are the main color accents, with the environment in cream, warm neutral, muted green, light denim, and brushed metal.
+
+Lighting:
+Bright clean daylight, soft shadows, real material texture, low-to-medium contrast, fresh and breathable.
+
+Avoid:
+candy-like dopamine overload, beach party props, childish styling, luxury jewelry styling, heavy camping gear, clutter, studio product catalog style, fake logos, text overlay, watermark, wrong phone case colors, black rugged case.</pre>
+    </section>
+
+    <section class="section" id="features">
+      <div class="section-head">
+        <div><h2>04 核心卖点总览图</h2><div class="meta"><span class="badge">16:9</span><span class="badge orange">1920x1080</span><span class="badge">气囊 / 支架 / 背板 / 侧边</span></div></div>
+        <button class="copy" data-copy="prompt-features">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>产品强参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li><li>实拍参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳实拍图\20260509-164039.475-1.jpg</code></li><li>实拍参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳实拍图\20260509-164039.475-4.jpg</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>适合后期加卖点标注。</li><li>四个结构区域可见。</li><li>产品清爽轻量，不厚重。</li></ul></div>
+      </div>
+      <pre id="prompt-features">Generate a horizontal 16:9 premium product feature overview image for Q3 Air Summer phone case.
+
+Use the uploaded phone case references strictly for product structure, colors, translucent bumper, side grip, air-cushion corners, back panel, buttons, MagSafe-style circle, and ring stand.
+
+Scene:
+Clean refined product environment with soft daylight and subtle material surfaces. Minimal props only, such as pale stone, clear acrylic, brushed metal, and light fabric. No human model.
+
+Subject:
+One Q3 Air Summer phone case shown at a dynamic 3/4 angle, with visual emphasis on four feature zones: corner air cushion, ring stand, translucent back panel, and side grip/buttons. The image should feel technical but elegant.
+
+Composition:
+Horizontal 16:9. Product large, crisp, and premium. Use natural depth and subtle shadows. Leave clean space for designers to add labels later; do not include text or labels in the image.
+
+Lighting:
+Bright clean daylight, crisp product edges, soft shadows, translucent material glow without excessive shine.
+
+Avoid:
+text labels, arrows, infographic typography, fake UI, fake logos, black rugged case, wrong ring stand, wrong camera cutout, bulky armor, messy props, dark background, cheap plastic look, watermark.</pre>
+    </section>
+
+    <section class="section" id="airbag">
+      <div class="section-head">
+        <div><h2>05 气囊结构动画关键帧</h2><div class="meta"><span class="badge">16:9</span><span class="badge orange">1920x1080</span><span class="badge">3D 技术参考</span></div></div>
+        <button class="copy" data-copy="prompt-airbag">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>产品强参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li><li>角落结构参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳实拍图\20260509-164039.475-4.jpg</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>像轻量气囊结构，不是装甲。</li><li>可作为动画方向参考。</li><li>留出后期加说明空间。</li></ul></div>
+      </div>
+      <pre id="prompt-airbag">Generate a horizontal 16:9 premium 3D technical visualization of the Q3 Air Summer phone case corner air-cushion structure.
+
+Use the phone case reference strictly for the translucent teal/lime/citrus material language, rounded bumper, and corner shape.
+
+Scene:
+Minimal clean light background, no lifestyle environment, no clutter.
+
+Subject:
+An enlarged phone case corner with translucent outer bumper, visible inner air cushion channels, layered protective structure, and subtle compression/rebound motion cues. It should feel like lightweight engineering, not heavy armor.
+
+Composition:
+Macro 3/4 cutaway angle, corner protection as the hero. Leave empty space for later design annotations. No text or labels inside the image.
+
+Lighting:
+Clean studio daylight, crisp edges, soft translucent refraction, light and technical.
+
+Color palette:
+Translucent aqua teal, soft lime glow, small citrus orange accent, white, pale gray.
+
+Avoid:
+black rugged case, sci-fi armor, excessive glow, medical diagram, machinery, cluttered exploded parts, text, labels, watermark, distorted geometry.</pre>
+    </section>
+
+    <section class="section" id="creator">
+      <div class="section-head">
+        <div><h2>06 模特轮播图 A：Creator City</h2><div class="meta"><span class="badge">4:5 / 1:1</span><span class="badge orange">1536x1920 / 1536x1536</span><span class="badge">城市 creator</span></div></div>
+        <button class="copy" data-copy="prompt-creator">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>城市休闲调性参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\SPRING-SUMMER 23.jpg</code></li><li>穿搭/姿态参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\VANS @Feature All Things Good.png</code></li><li>产品参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>有 creator 审美。</li><li>低饱和但不灰暗。</li><li>真实生活感，不像棚拍。</li></ul></div>
+      </div>
+      <pre id="prompt-creator">Generate a vertical 4:5 photorealistic UGC-style lifestyle image for Q3 Air Summer.
+
+Use the reference images only for wardrobe styling, composition, lighting direction, pose energy, and scene mood. Do not copy or preserve the face, identity, hairstyle, facial features, or exact body of any reference person. Create a new fictional adult model with a different face and different hairstyle. Face should not be dominant.
+
+Scene:
+A quiet gallery street, minimal cafe entrance, or design studio doorway in natural daylight. Clean but lived-in, refined but not luxury.
+
+Subject:
+One stylish adult creator or design-minded user around 28-35 for a North American / European market. Outfit in cream, warm neutral, soft burgundy, muted green, light denim, or tailored casual pieces. No visible brand logos.
+
+Action:
+The person is naturally checking a message while walking or photographing coffee/table details. Avoid stiff standing or obvious modeling poses.
+
+Phone case:
+Use the uploaded phone case reference strictly. The case should be clearly visible and match the reference structure, colors, camera cutout, side buttons/grip, and stand/ring details. The case should feel coordinated with the outfit, not pasted on.
+
+Composition:
+Vertical 4:5 crop, candid mid-body or close lifestyle framing. Outfit and atmosphere are the first read; phone case is visible within 3 seconds. Natural hand position, realistic scale.
+
+Lighting:
+Soft natural daylight, gentle shadows, real material texture, slightly imperfect UGC realism, bright and breathable.
+
+Avoid:
+poster, infographic, text overlay, fake logos, celebrity likeness, watermark, distorted phone case, wrong colors, distorted hands, extra fingers, product catalog style, studio white background, overly glossy fashion campaign look, copied reference face, teenage look, influencer selfie pose.</pre>
+    </section>
+
+    <section class="section" id="roadtrip">
+      <div class="section-head">
+        <div><h2>07 模特轮播图 B：Road Trip Departure</h2><div class="meta"><span class="badge">4:5</span><span class="badge orange">1536x1920</span><span class="badge">夏天出发</span></div></div>
+        <button class="copy" data-copy="prompt-roadtrip">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>road trip 原始参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\A weekend on Joshua Tree. For @Chase  @marriotthotels.jpg</code></li><li>夏日成年人情绪参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\5 tips to manage your blood sugar while dining out @Stelo赞助的 Pin 图.png</code></li><li>产品参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>有出发事件感，但色调清透。</li><li>不继承暗调和 AI 皮肤。</li><li>产品自然出现，不像硬贴。</li></ul></div>
+      </div>
+      <pre id="prompt-roadtrip">Generate a vertical 4:5 photorealistic lifestyle image for Q3 Air Summer, showing a refined summer road trip departure moment.
+
+Use the reference images only for wardrobe styling, composition, lighting direction, pose energy, and scene mood. Do not copy or preserve the face, identity, hairstyle, facial features, or exact body of any reference person. Create a new fictional adult model with a different face and different hairstyle. Face should not be dominant.
+
+Scene:
+A clean summer road trip departure moment near a city park or accessible trailhead. Open car trunk, canvas tote, water bottle, sunglasses, light jacket, and soft greenery in the background. The setting feels real, fresh, and modern, not a luxury car ad.
+
+Subject:
+One stylish adult creator or design-minded user around 28-35, North American / European market. Outfit in cream, warm neutral, muted green, light denim, or soft burgundy accents. Refined summer utility styling, not tourist wear.
+
+Action:
+The person is checking the route, reaching into a tote, picking up the phone from the trunk area, or preparing to leave. The phone is part of the action, not held beside the face.
+
+Phone case:
+Use the uploaded phone case reference strictly. The case should match the reference structure, colors, camera cutout, side buttons/grip, and stand/ring details as much as possible. It should be the clearest bright accent in the scene.
+
+Composition:
+Vertical 4:5 crop, candid mid-body framing, layered foreground objects, phone visible within 3 seconds, car and travel objects secondary, natural hand position.
+
+Lighting:
+Bright clean summer daylight, airy high-key natural light, soft open shade, clear whites, breathable shadows, low-to-medium contrast. Avoid golden-hour orange cast.
+
+Model rendering:
+Realistic adult skin texture, natural pores and subtle imperfections, no plastic skin, relaxed expression.
+
+Avoid:
+dark color grade, golden-hour orange cast, luxury car ad, messy trunk, teen road trip party, beach bikini, hard-core off-road adventure, fake smile, influencer pose, black rugged phone case, fake phone UI text, visible brand logos, watermark, distorted hands, extra fingers, copied reference face.</pre>
+    </section>
+
+    <section class="section" id="trail">
+      <div class="section-head">
+        <div><h2>08 模特轮播图 C：Weekend Trail</h2><div class="meta"><span class="badge">4:5</span><span class="badge orange">1536x1920</span><span class="badge">轻户外</span></div></div>
+        <button class="copy" data-copy="prompt-trail">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>轻户外穿搭参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\Joytrek Midlayer Grid Fleece Zip Neck - L SENIQ.png</code></li><li>户外 campaign 参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\SS23 2.jpg</code></li><li>产品参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>设计感轻 trail，不是 hiking 广告。</li><li>清透明亮，不暗绿。</li><li>手机动作真实。</li></ul></div>
+      </div>
+      <pre id="prompt-trail">Generate a vertical 4:5 photorealistic lifestyle image for Q3 Air Summer, showing a refined weekend trail moment.
+
+Use the reference images only for outdoor styling, composition, lighting direction, posture, and refined campaign mood. Do not copy or preserve the face, identity, hairstyle, facial features, or exact body of any reference person. Create a new fictional adult model with a different face and different hairstyle. Face should not be dominant.
+
+Scene:
+An accessible summer trailhead close to the city, with open shade, pale stone path, dry grass, trees, and bright sky peeking through. Fresh and breathable, not dark forest or wilderness expedition.
+
+Subject:
+One stylish adult creator or design-minded user around 28-35 for a North American / European market. Outfit should be more designed than standard hiking: lightweight technical shell, sleeveless utility vest or camp shirt, clean base layer, modern trail shorts or outdoor skirt, trail sneakers, compact sling or small backpack, cap or sunglasses optional.
+
+Action:
+The person is checking a route, adjusting a bag strap, or pausing mid-walk with the phone in hand. The phone is used naturally, not held beside the face as a product pose.
+
+Phone case:
+Use the uploaded phone case reference strictly. The case should look like a translucent summer protective phone case with aqua teal, lime, citrus orange, or pale blue accents, rounded bumper, and circular stand/magnetic detail.
+
+Composition:
+Vertical 4:5 crop, premium outdoor campaign photography, layered depth, model integrated with trail environment, clear but subtle phone visibility.
+
+Lighting:
+Bright clean summer daylight, airy high-key natural light, soft open shade, clear whites, breathable shadows, low-to-medium contrast, fresh greens and pale sky blue.
+
+Model rendering:
+Realistic adult skin texture with natural pores, no plastic skin, no beauty filter, no over-smoothed face. Natural candid expression.
+
+Avoid:
+dark forest, moody contrast, heavy golden-hour orange cast, generic hiking catalog outfit, bulky hiking pants, heavy backpack, survival gear, extreme mountain summit, teenage styling, bikini, influencer selfie pose, black rugged phone case, fake phone UI text, visible brand logos, watermark, distorted hands, extra fingers, copied reference face.</pre>
+    </section>
+
+    <section class="section" id="park">
+      <div class="section-head">
+        <div><h2>09 模特轮播图 D：Park Social / Ostand</h2><div class="meta"><span class="badge">1:1 / 4:5</span><span class="badge orange">1536x1536 / 1536x1920</span><span class="badge">支架社交</span></div></div>
+        <button class="copy" data-copy="prompt-park">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>公园社交参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\Summer Picnic Aesthetic 2.jpg</code></li><li>自然互动参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\Summer Picnic Aesthetic.jpg</code></li><li>产品参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>支架自然可理解。</li><li>安静、有设计感，不杂乱。</li><li>人物不抢产品。</li></ul></div>
+      </div>
+      <pre id="prompt-park">Generate a square 1:1 photorealistic UGC-style lifestyle image for Q3 Air Summer, showing hands-free content review with the Ostand/ring stand.
+
+Use the reference images only for relaxed adult park energy, candid interaction, lighting, and composition. Do not copy or preserve the face, identity, hairstyle, facial features, or exact body of any reference person. Create new fictional adult people with different faces and hairstyles. Faces should not be dominant.
+
+Scene:
+A quiet city park lawn or picnic blanket in clean summer daylight. Minimal objects: notebook, iced coffee, water bottle, sunglasses, tote bag, light denim, cream fabric. Clean but lived-in, not a messy picnic.
+
+Subject:
+Two or three adult creators / design-minded users around 26-35 relaxing casually. The phone is propped up with its ring stand for hands-free content review, video call, or framing a group photo. People are secondary; the product use is clear.
+
+Phone case:
+Use the uploaded phone case reference strictly. The case should match the reference colors, translucent bumper, stand/ring detail, camera cutout, and side details as much as possible.
+
+Composition:
+Square 1:1 crop, candid close-to-medium framing. Phone stand visible within 3 seconds, but the image still feels like refined lifestyle content, not a product catalog shot.
+
+Lighting:
+Bright clean daylight, soft shadows, real fabric and grass texture, low-to-medium contrast, fresh greens and cream neutrals.
+
+Avoid:
+college party, teenage styling, exaggerated laughter, bikini, messy picnic clutter, overly cute dopamine props, fake phone UI text, visible brand logos, black rugged phone case, watermark, distorted hands, extra fingers, copied reference faces, studio product catalog style.</pre>
+    </section>
+
+    <section class="section" id="grip">
+      <div class="section-head">
+        <div><h2>10 局部卖点图 A：握持 / 侧边防滑</h2><div class="meta"><span class="badge">1:1 / 4:3</span><span class="badge orange">1536x1536</span><span class="badge">侧边细节</span></div></div>
+        <button class="copy" data-copy="prompt-grip">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>产品实拍强参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳实拍图\20260509-164039.475-4.jpg</code></li><li>产品渲染强参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li><li>场景材质参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\Birkenstock Womens Boston Soft Footbed Suede Clog in Mocha, Womens at.jpg</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>手真实。</li><li>侧边和按键清楚。</li><li>产品准确，不变成别的壳。</li></ul></div>
+      </div>
+      <pre id="prompt-grip">Generate a square 1:1 premium close lifestyle product photo for Q3 Air Summer grip and side protection.
+
+Use the product reference images as the strongest reference for the phone case structure, translucent bumper, color, side button, grip texture, rounded air-cushion corner, camera cutout, and ring stand detail. Use the lifestyle reference only for relaxed summer material mood.
+
+Scene:
+Outdoor cafe table, design studio desk, or park-side bench with soft natural daylight. Minimal refined objects: iced coffee, notebook, cream knit sleeve, tote strap, sunglasses, brushed metal key ring. Low clutter.
+
+Subject:
+An adult hand naturally holding the smartphone in the colorful translucent protective case. Side edge, colored button, grip texture, and corner bumper should be visible and sharp.
+
+Composition:
+Square 1:1 close-up crop, phone edge and hand dominate the frame, shallow depth of field, clean background, real material texture.
+
+Lighting:
+Bright soft daylight, breathable shadows, realistic reflections on translucent material, crisp edges.
+
+Color palette:
+Cream, warm neutral, muted green, light denim, brushed metal, with aqua teal, lime, and citrus orange as product accents.
+
+Constraints:
+Preserve the case design from reference as much as possible. Realistic hand anatomy. No fake UI text. No black rugged case. No unrealistic bulky armor.
+
+Avoid:
+distorted hand, extra fingers, warped phone, wrong ring stand shape, visible third-party logos, watermark, messy desk, cheap plastic look, dark color grade, over-glossy product render.</pre>
+    </section>
+
+    <section class="section" id="stand">
+      <div class="section-head">
+        <div><h2>11 局部卖点图 B：支架 / 内容查看</h2><div class="meta"><span class="badge">1:1 / 4:3</span><span class="badge orange">1536x1536</span><span class="badge">Ostand</span></div></div>
+        <button class="copy" data-copy="prompt-stand">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>产品强参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li><li>公园/桌面材质参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\Summer Picnic Aesthetic.jpg</code></li><li>creator 桌面参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\Birkenstock Womens Boston Soft Footbed Suede Clog in Mocha, Womens at.jpg</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>支架结构能看懂。</li><li>真实材质，不是棚拍。</li><li>产品颜色是焦点。</li></ul></div>
+      </div>
+      <pre id="prompt-stand">Generate a square 1:1 premium UGC-style lifestyle product image for the Q3 Air Summer built-in ring stand.
+
+Use the phone case reference strictly for the case structure, translucent bumper, colors, ring stand shape, camera cutout, and side details.
+
+Scene:
+A refined cafe table, creator desk, or city park blanket in bright natural daylight. Objects are minimal and tasteful: notebook, iced coffee, sunglasses, cream fabric, water bottle, light denim, small snack. Clean but real.
+
+Subject:
+A smartphone in the Q3 Air Summer translucent case is propped up using its ring stand for hands-free content review. Adult hands may be nearby, but no face is necessary. The stand should look stable, functional, and natural.
+
+Composition:
+Square 1:1 close lifestyle framing. Phone and stand are the hero. Environment supports the story but does not clutter the image. Not a white-background product catalog shot.
+
+Lighting:
+Soft natural daylight, gentle shadows, real material texture, clear whites, low-to-medium contrast.
+
+Color palette:
+Cream, warm neutral, muted green, light denim, brushed metal, with the phone case as the brighter aqua/lime/citrus accent.
+
+Avoid:
+wrong stand shape, unstable phone angle, distorted phone case, fake UI text, visible brand logos, black rugged phone case, messy props, studio white background, watermark, distorted hands, extra fingers, dark color grade.</pre>
+    </section>
+
+    <section class="section" id="magsafe">
+      <div class="section-head">
+        <div><h2>12 局部卖点图 C：磁吸 / 车载或桌面充电</h2><div class="meta"><span class="badge">1:1 / 4:3</span><span class="badge orange">1536x1536</span><span class="badge">磁吸便利</span></div></div>
+        <button class="copy" data-copy="prompt-magsafe">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>产品强参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li><li>road trip 氛围参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\A weekend on Joshua Tree. For @Chase  @marriotthotels.jpg</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>磁吸/车载一眼能懂。</li><li>不要变汽车广告。</li><li>产品不要在暗车内被吃掉。</li></ul></div>
+      </div>
+      <pre id="prompt-magsafe">Generate a square 1:1 premium lifestyle product image showing MagSafe-style magnetic convenience for Q3 Air Summer phone case.
+
+Use the phone case reference strictly for structure, colors, camera cutout, translucent bumper, and circular magnetic/ring stand detail.
+
+Scene:
+Option A: clean car interior near an open door in bright summer daylight, phone connected to a magnetic car mount for navigation.
+Option B: refined creator desk or entryway table, phone magnetically charging beside keys, sunglasses, notebook, and tote bag.
+
+Subject:
+The smartphone in Q3 Air Summer case is attached to a magnetic mount or charger. The magnetic use should be visually clear but not overly technical.
+
+Composition:
+Square 1:1 close-to-medium lifestyle crop. Phone is the hero, surrounding objects tell an out-the-door story. Clean background, shallow depth of field.
+
+Lighting:
+Bright clean summer daylight, soft open shade, clear whites, realistic reflections, low-to-medium contrast.
+
+Color palette:
+Cream, warm neutral, muted green, light denim, brushed metal, aqua teal, lime, citrus orange.
+
+Avoid:
+fake charging text, fake navigation UI, visible brand logos, black rugged phone case, bulky phone mount, messy dashboard, dark car interior, luxury car ad, watermark, distorted hands, extra fingers, wrong case shape.</pre>
+    </section>
+
+    <section class="section" id="carry">
+      <div class="section-head">
+        <div><h2>13 收尾氛围图：Pack Light / Summer Everyday Carry</h2><div class="meta"><span class="badge">16:9 / 1:1</span><span class="badge orange">1920x1080</span><span class="badge">随身装备</span></div></div>
+        <button class="copy" data-copy="prompt-carry">复制提示词</button>
+      </div>
+      <div class="cols">
+        <div class="refs"><h3>参考图</h3><ul><li>产品强参考<code class="path">E:\漆安潞工作文件夹\2026\5月份\QAir夏季系列\项目资料\手机壳渲染图.png</code></li><li>静物/材质参考<code class="path">C:\Users\Administrator\Documents\QAir夏季系列\Q3AirSummer_人群参考精选\Birkenstock Womens Boston Soft Footbed Suede Clog in Mocha, Womens at.jpg</code></li></ul></div>
+        <div class="check"><h3>验收点</h3><ul><li>表达轻装出门。</li><li>真实材质和留白。</li><li>产品是唯一亮点。</li></ul></div>
+      </div>
+      <pre id="prompt-carry">Generate a horizontal 16:9 photorealistic still-life lifestyle image for Q3 Air Summer, expressing “pack light for summer”.
+
+Use the phone case reference strictly for product structure, colors, translucent bumper, and ring stand detail.
+
+Scene:
+A refined summer everyday carry layout on a clean cafe table, design studio desk, or car trunk surface. Objects: Q3 Air Summer phone case, sunglasses, water bottle, notebook, keys, light denim jacket, cream tote, brushed metal clip, small citrus accent. Quiet, intentional, not cluttered.
+
+Subject:
+The phone case is naturally placed among the everyday carry objects, as a lightweight protective summer tool. It should be the clearest color accent.
+
+Composition:
+Horizontal 16:9, clean negative space, top-down or low 3/4 angle, tactile materials, premium lifestyle still life.
+
+Lighting:
+Bright clean natural daylight, soft shadows, real texture, fresh and breathable.
+
+Color palette:
+Cream, warm neutral, muted green, light denim, brushed metal, aqua teal, lime, citrus orange.
+
+Avoid:
+messy flat lay, beach party props, childish dopamine items, heavy camping gear, luxury jewelry styling, fake logos, text overlay, watermark, black rugged phone case, wrong product colors, dark moody grade.</pre>
+    </section>
+
+    <div class="note">
+      使用建议：每次生成先上传对应参考图，并说明图片角色，例如 Image 1: mood / wardrobe reference only，Image 2: composition reference only，Image 3: product reference, follow strictly。若脸被复制，先裁掉或模糊参考图脸部；若画面变暗，追加“Make the image brighter, cleaner, and more breathable. Remove the warm golden cast.”
+    </div>
+  </div>
+
+  <div class="toast" id="toast">已复制提示词</div>
+
+  <script>
+    const toast = document.getElementById('toast');
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1300);
+    }
+
+    document.querySelectorAll('.copy').forEach(button => {
+      button.addEventListener('click', async () => {
+        const id = button.getAttribute('data-copy');
+        const el = document.getElementById(id);
+        const text = el ? el.innerText : '';
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast('已复制提示词');
+        } catch (error) {
+          const range = document.createRange();
+          range.selectNodeContents(el);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          showToast('已选中，请按 Ctrl+C');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

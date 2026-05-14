@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Q3 Air Summer 生成图分类预览</title>
+    <style>
+      :root {
+        --ink: #17201c;
+        --muted: #66736b;
+        --paper: #f7f7f1;
+        --panel: #ffffff;
+        --line: #d9ded1;
+        --aqua: #00a8b0;
+        --lime: #b8dc3c;
+        --coral: #f36f4b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+      }
+
+      .hero {
+        padding: 42px 5vw 30px;
+        background:
+          linear-gradient(135deg, rgba(0, 168, 176, 0.12), rgba(184, 220, 60, 0.14)),
+          #eef1e9;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .hero-inner {
+        max-width: 1320px;
+        margin: 0 auto;
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        color: var(--aqua);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0 0 14px;
+        font-size: clamp(34px, 5vw, 64px);
+        line-height: 1;
+        letter-spacing: 0;
+      }
+
+      .hero p {
+        max-width: 780px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        max-width: 1320px;
+        margin: 28px auto 0;
+      }
+
+      .stat {
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .stat strong {
+        display: block;
+        font-size: 24px;
+      }
+
+      .stat span {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 14px 5vw;
+        border-bottom: 1px solid var(--line);
+        background: rgba(247, 247, 241, 0.92);
+        backdrop-filter: blur(14px);
+      }
+
+      .filter {
+        flex: 0 0 auto;
+        min-height: 38px;
+        padding: 0 14px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        background: var(--panel);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 760;
+        cursor: pointer;
+      }
+
+      .filter.active {
+        color: #ffffff;
+        border-color: var(--ink);
+        background: var(--ink);
+      }
+
+      main {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 34px 5vw 72px;
+      }
+
+      .category {
+        margin-bottom: 54px;
+        scroll-margin-top: 82px;
+      }
+
+      .category.hidden {
+        display: none;
+      }
+
+      .category-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 18px;
+      }
+
+      .category-head h2 {
+        margin: 0 0 8px;
+        font-size: 28px;
+        letter-spacing: 0;
+      }
+
+      .category-head p {
+        max-width: 720px;
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .count {
+        flex: 0 0 auto;
+        color: var(--aqua);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .thumb {
+        position: relative;
+        width: 100%;
+        background: #e9ede2;
+        cursor: zoom-in;
+      }
+
+      .thumb.wide {
+        aspect-ratio: 16 / 9;
+      }
+
+      .thumb.vertical {
+        aspect-ratio: 4 / 5;
+      }
+
+      .thumb.square {
+        aspect-ratio: 1 / 1;
+      }
+
+      .thumb img {
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .badge {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        padding: 6px 8px;
+        border-radius: 999px;
+        color: #ffffff;
+        background: rgba(23, 32, 28, 0.78);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .meta {
+        padding: 14px;
+      }
+
+      .meta h3 {
+        margin: 0 0 8px;
+        font-size: 16px;
+        line-height: 1.25;
+      }
+
+      .meta p {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+
+      .tags span {
+        padding: 5px 8px;
+        border-radius: 999px;
+        color: #365047;
+        background: #edf2e7;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .filename {
+        display: block;
+        margin-top: 12px;
+        color: #8a958f;
+        font-size: 12px;
+        word-break: break-all;
+      }
+
+      dialog {
+        width: min(1180px, 92vw);
+        padding: 0;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+      }
+
+      dialog::backdrop {
+        background: rgba(7, 12, 10, 0.78);
+      }
+
+      .lightbox {
+        overflow: hidden;
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .lightbox img {
+        max-height: 82vh;
+        object-fit: contain;
+        background: #101511;
+      }
+
+      .lightbox-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 14px;
+      }
+
+      .lightbox-title {
+        margin: 0;
+        font-weight: 780;
+      }
+
+      .close {
+        min-height: 34px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--paper);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 760;
+        cursor: pointer;
+      }
+
+      @media (max-width: 960px) {
+        .stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 620px) {
+        .hero {
+          padding: 30px 18px 24px;
+        }
+
+        .toolbar {
+          padding-left: 18px;
+          padding-right: 18px;
+        }
+
+        main {
+          padding-left: 18px;
+          padding-right: 18px;
+        }
+
+        .stats,
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .category-head {
+          display: block;
+        }
+
+        .count {
+          display: inline-block;
+          margin-top: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">Q3 Air Summer</p>
+        <h1>生成图分类预览板</h1>
+        <p>用于快速查看提示词库生成图，把素材按官网模块用途分类：首屏、产品静物、结构卖点、人物场景、支架、磁吸、握持与收尾图。点击任意图片可放大预览。</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>31</strong><span>张素材</span></div>
+        <div class="stat"><strong>10</strong><span>个用途分类</span></div>
+        <div class="stat"><strong>16:9 / 4:5 / 1:1</strong><span>覆盖主要页面比例</span></div>
+        <div class="stat"><strong>本地可打开</strong><span>图片已复制到当前预览 assets</span></div>
+      </div>
+    </header>
+
+    <nav class="toolbar" aria-label="分类筛选">
+      <button class="filter active" data-filter="all">全部</button>
+      <button class="filter" data-filter="hero">首屏 / Hero</button>
+      <button class="filter" data-filter="product">产品静物</button>
+      <button class="filter" data-filter="structure">结构卖点</button>
+      <button class="filter" data-filter="city">Creator City</button>
+      <button class="filter" data-filter="roadtrip">Road Trip</button>
+      <button class="filter" data-filter="trail">Weekend Trail</button>
+      <button class="filter" data-filter="park">Park Social</button>
+      <button class="filter" data-filter="stand">Ostand 支架</button>
+      <button class="filter" data-filter="magsafe">磁吸 / 车载</button>
+      <button class="filter" data-filter="grip">握持近景</button>
+      <button class="filter" data-filter="closing">Pack Light</button>
+    </nav>
+
+    <main id="gallery"></main>
+
+    <dialog id="preview">
+      <div class="lightbox">
+        <img id="previewImage" alt="" />
+        <div class="lightbox-footer">
+          <p class="lightbox-title" id="previewTitle"></p>
+          <button class="close" id="closePreview">关闭</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script>
+      const categories = [
+        {
+          id: "hero",
+          title: "首屏 / Hero 备选",
+          desc: "适合独立站首屏、页面顶部大图或 campaign 开场。重点看留白、人物状态、产品 3 秒可见度。",
+          items: [
+            ["01-hero-creator-city.png", "Hero 初版 - Creator City", "16:9", "已用于当前页面首屏，画面干净，有左侧留白，但动作偏站立看手机。", ["首屏", "城市", "男性 creator"]],
+            ["27-hero-city-wide-a.png", "Hero 备选 A", "16:9", "城市门口场景，适合做首屏备选或页面顶部轮播。", ["首屏", "城市", "留白"]],
+            ["28-hero-city-wide-b.png", "Hero 备选 B", "16:9", "同一城市 creator 方向，可用于不同裁切测试。", ["首屏", "城市", "产品露出"]],
+            ["29-hero-city-wide-c.png", "Hero 备选 C", "16:9", "女性 creator 方向，更适合打破现有男性图重复感。", ["首屏", "女性", "清爽"]],
+            ["30-hero-city-wide-d.png", "Hero 备选 D", "16:9", "门口/街边生活方式构图，适合首屏或 Creator City 模块。", ["首屏", "女性", "城市"]]
+          ]
+        },
+        {
+          id: "product",
+          title: "产品静物 / 配色理念",
+          desc: "适合产品旋转动画前导、配色故事、页面静物过渡。低饱和环境让手机壳成为唯一亮点。",
+          items: [
+            ["02-product-colorways-water.png", "双配色水光产品图", "16:9", "适合作为产品旋转动画或配色模块开场。", ["产品", "双配色", "清透"]],
+            ["03-color-story-desk.png", "桌面配色故事", "16:9", "有随身物件和夏季材质，适合讲颜色灵感。", ["配色", "静物", "桌面"]],
+            ["04-single-case-fabric.png", "单壳布面近景", "16:9", "干净、产品明确，适合模块封面或局部裁切。", ["产品", "单品", "材质"]],
+            ["05-color-story-travel.png", "旅行物件配色故事", "16:9", "两款色彩都出现，适合颜色对比和 lifestyle 静物。", ["配色", "旅行", "双配色"]],
+            ["07-product-rotation-opening.png", "产品旋转前导", "16:9", "清爽的双壳主视觉，适合作为产品 section 第一帧。", ["产品", "旋转", "双配色"]]
+          ]
+        },
+        {
+          id: "structure",
+          title: "结构卖点 / 气囊",
+          desc: "适合结构动画关键帧、气囊防护说明和产品科技感模块。建议后期加标注。",
+          items: [
+            ["06-air-cushion-corner.png", "气囊结构角落", "16:9", "能突出角落保护和透明材质，适合技术卖点模块。", ["气囊", "结构", "技术"]]
+          ]
+        },
+        {
+          id: "city",
+          title: "Creator City / 城市轻行动",
+          desc: "强调设计感成年人、城市门口、咖啡/工作室与出门前动作。适合人物轮播 A。",
+          items: [
+            ["08-creator-city-portrait.png", "Creator City 竖图", "4:5", "城市 creator 手持手机，适合人物轮播。", ["城市", "人物", "4:5"]],
+            ["11-creator-city-male.png", "Creator City 男性", "4:5", "可作为城市日常模块，但注意与 Hero 人物重复。", ["城市", "男性", "产品露出"]],
+            ["14-cafe-creator.png", "咖啡场景 creator", "4:5", "坐姿更生活化，适合页面中段小图。", ["咖啡", "城市", "UGC"]]
+          ]
+        },
+        {
+          id: "roadtrip",
+          title: "Road Trip / 出发前",
+          desc: "这组最能表达“手机是夏日移动工具”。适合人物轮播 B、导航/出发场景和页面故事模块。",
+          items: [
+            ["09-roadtrip-woman-trunk.png", "Road Trip 女性后备箱", "4:5", "动作自然，人物和产品都清楚。", ["Road Trip", "女性", "后备箱"]],
+            ["13-roadtrip-male-trunk.png", "Road Trip 男性后备箱", "4:5", "事件感强，适合出发前场景。", ["Road Trip", "男性", "收纳"]],
+            ["16-roadtrip-woman-pack.png", "Road Trip Pack", "4:5", "女性整理包，适合替代重复男性素材。", ["Road Trip", "女性", "出发"]]
+          ]
+        },
+        {
+          id: "trail",
+          title: "Weekend Trail / 轻户外",
+          desc: "用于表达城市到轻户外的边界。重点是清透日光、轻机能穿搭、不是硬核徒步。",
+          items: [
+            ["10-weekend-trail.png", "Weekend Trail 全身", "4:5", "轻 trail 方向明确，适合人物轮播 C。", ["Trail", "女性", "4:5"]],
+            ["15-trail-portrait.png", "Weekend Trail 近景", "4:5", "产品更清楚，适合移动场景说明。", ["Trail", "产品露出", "轻户外"]]
+          ]
+        },
+        {
+          id: "park",
+          title: "Park Social / 公园社交",
+          desc: "用于说明公园、社交、看内容、视频通话等场景。适合人物轮播 D 和 Ostand 场景铺垫。",
+          items: [
+            ["12-park-social-close.png", "Park Social 近景", "1:1", "三人围看手机，支架/产品使用关系清楚。", ["公园", "社交", "支架"]],
+            ["17-park-social-ostand.png", "Park Social Ostand", "1:1", "支架站立更明显，适合功能说明。", ["公园", "Ostand", "群体"]],
+            ["20-park-social-city.png", "Park Social 城市背景", "1:1", "人物状态更完整，适合社交 lifestyle。", ["公园", "城市", "社交"]]
+          ]
+        },
+        {
+          id: "stand",
+          title: "Ostand 支架 / 内容查看",
+          desc: "最适合功能卖点图。建议优先用于“hands-free viewing”“video call”“content review”等段落。",
+          items: [
+            ["22-ostand-picnic.png", "Ostand 野餐布", "1:1", "横放支架，画面自然，适合功能模块。", ["Ostand", "野餐", "横放"]],
+            ["25-desk-charging-stand.png", "桌面支架 / 充电", "1:1", "带底座感，适合桌面功能图。", ["Ostand", "桌面", "支架"]],
+            ["26-ostand-cafe-table.png", "咖啡桌 Ostand", "1:1", "桌面内容查看，材质感好。", ["Ostand", "咖啡", "近景"]],
+            ["31-ostand-picnic-alt.png", "Ostand 野餐补充", "1:1", "最新补充图，适合做支架功能备选。", ["Ostand", "野餐", "备选"]]
+          ]
+        },
+        {
+          id: "magsafe",
+          title: "磁吸 / 车载",
+          desc: "适合讲磁吸车载、导航、出门前连接等功能。注意不要让画面变成汽车广告。",
+          items: [
+            ["21-magsafe-car-mount.png", "车载磁吸 A", "1:1", "车内磁吸场景清楚，适合导航/车载模块。", ["磁吸", "车载", "导航"]],
+            ["23-magsafe-dashboard.png", "车载磁吸 B", "1:1", "产品更居中，车内物件补足出门氛围。", ["磁吸", "车载", "产品"]]
+          ]
+        },
+        {
+          id: "grip",
+          title: "握持 / 侧边防滑",
+          desc: "适合讲侧边按键、握持、防滑和日常手感。用于打补丁式强化产品可信度。",
+          items: [
+            ["24-grip-hand-closeup.png", "握持近景", "1:1", "手持产品清楚，适合 grip / side protection 模块。", ["握持", "侧边", "近景"]]
+          ]
+        },
+        {
+          id: "closing",
+          title: "Pack Light / 收尾静物",
+          desc: "适合页面尾部、随身装备、Everyday Carry 段落，用“轻装出门”收束整页。",
+          items: [
+            ["18-everyday-carry-flatlay.png", "Everyday Carry 平铺", "16:9", "随身物件完整，适合收尾或配色故事。", ["EDC", "平铺", "收尾"]],
+            ["19-pack-light-flatlay.png", "Pack Light 平铺", "16:9", "画面更有夏季装备感，适合页面尾图。", ["Pack Light", "静物", "收尾"]]
+          ]
+        }
+      ];
+
+      const gallery = document.querySelector("#gallery");
+      const dialog = document.querySelector("#preview");
+      const previewImage = document.querySelector("#previewImage");
+      const previewTitle = document.querySelector("#previewTitle");
+
+      function imageClass(ratio) {
+        if (ratio === "16:9") return "wide";
+        if (ratio === "4:5") return "vertical";
+        return "square";
+      }
+
+      function render(filter = "all") {
+        gallery.innerHTML = "";
+        categories.forEach((category) => {
+          if (filter !== "all" && filter !== category.id) return;
+          const section = document.createElement("section");
+          section.className = "category";
+          section.id = category.id;
+          section.innerHTML = `
+            <div class="category-head">
+              <div>
+                <h2>${category.title}</h2>
+                <p>${category.desc}</p>
+              </div>
+              <span class="count">${category.items.length} 张</span>
+            </div>
+            <div class="grid"></div>
+          `;
+          const grid = section.querySelector(".grid");
+          category.items.forEach(([file, title, ratio, desc, tags], index) => {
+            const card = document.createElement("article");
+            card.className = "card";
+            card.innerHTML = `
+              <button class="thumb ${imageClass(ratio)}" type="button" aria-label="放大预览 ${title}">
+                <img src="./assets/${file}" alt="${title}" loading="lazy" />
+                <span class="badge">${ratio}</span>
+              </button>
+              <div class="meta">
+                <h3>${title}</h3>
+                <p>${desc}</p>
+                <div class="tags">${tags.map((tag) => `<span>${tag}</span>`).join("")}</div>
+                <span class="filename">${file}</span>
+              </div>
+            `;
+            card.querySelector(".thumb").addEventListener("click", () => {
+              previewImage.src = `./assets/${file}`;
+              previewImage.alt = title;
+              previewTitle.textContent = `${title} / ${file}`;
+              dialog.showModal();
+            });
+            grid.appendChild(card);
+          });
+          gallery.appendChild(section);
+        });
+      }
+
+      document.querySelectorAll(".filter").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".filter").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          render(button.dataset.filter);
+        });
+      });
+
+      document.querySelector("#closePreview").addEventListener("click", () => dialog.close());
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) dialog.close();
+      });
+
+      render();
+    </script>
+  </body>
+</html>
