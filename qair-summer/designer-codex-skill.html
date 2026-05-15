@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>设计师使用 Codex 的判断型 Skill</title>
+  <style>
+    :root {
+      --bg: #f6f7f4;
+      --paper: #ffffff;
+      --ink: #1d2525;
+      --muted: #6d7470;
+      --line: #dfe5dc;
+      --green: #167c6a;
+      --mint: #dff2ea;
+      --lime: #f0f47a;
+      --blue: #dfeaf8;
+      --peach: #ffe8d6;
+      --shadow: 0 18px 60px rgba(30, 42, 37, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(120deg, rgba(223, 242, 234, 0.75), rgba(246, 247, 244, 0) 36%),
+        linear-gradient(220deg, rgba(240, 244, 122, 0.35), rgba(246, 247, 244, 0) 32%),
+        var(--bg);
+      line-height: 1.65;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 52px 0 72px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: stretch;
+      margin-bottom: 28px;
+    }
+
+    .hero-main,
+    .hero-side,
+    .section,
+    .card,
+    .quote {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(223, 229, 220, 0.95);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-main {
+      padding: 42px;
+      border-radius: 22px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+      margin-bottom: 18px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--lime);
+      border: 1px solid rgba(29, 37, 37, 0.25);
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 22px 0 0;
+      color: #46504c;
+      font-size: 19px;
+    }
+
+    .hero-side {
+      border-radius: 22px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      background:
+        linear-gradient(145deg, rgba(223, 242, 234, 0.85), rgba(255, 255, 255, 0.88));
+    }
+
+    .side-title {
+      margin: 0 0 12px;
+      font-size: 22px;
+      line-height: 1.25;
+    }
+
+    .side-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .side-list li {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 10px;
+      color: #3d4743;
+    }
+
+    .badge {
+      display: inline-grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      color: var(--green);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .section {
+      border-radius: 22px;
+      padding: 34px;
+      margin-top: 24px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .section-note {
+      max-width: 500px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: none;
+      background: var(--paper);
+    }
+
+    .card.tint-mint {
+      background: linear-gradient(180deg, #ffffff, var(--mint));
+    }
+
+    .card.tint-blue {
+      background: linear-gradient(180deg, #ffffff, var(--blue));
+    }
+
+    .card.tint-peach {
+      background: linear-gradient(180deg, #ffffff, var(--peach));
+    }
+
+    .card h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 12px;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #17201d;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 19px;
+    }
+
+    li + li {
+      margin-top: 7px;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--paper);
+    }
+
+    .matrix-col {
+      padding: 24px;
+    }
+
+    .matrix-col + .matrix-col {
+      border-left: 1px solid var(--line);
+    }
+
+    .matrix-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      font-weight: 800;
+      color: var(--green);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .flow-step {
+      position: relative;
+      padding: 18px;
+      min-height: 166px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .flow-step::after {
+      content: "";
+      position: absolute;
+      top: 36px;
+      right: -12px;
+      width: 12px;
+      height: 1px;
+      background: var(--green);
+    }
+
+    .flow-step:last-child::after {
+      display: none;
+    }
+
+    .flow-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--mint);
+      color: var(--green);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .flow-step strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+
+    .flow-step span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .check {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .check-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--lime);
+      font-weight: 900;
+    }
+
+    .check strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .check span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .quote {
+      margin-top: 24px;
+      border-radius: 22px;
+      padding: 32px;
+      background:
+        linear-gradient(135deg, #17201d, #284139);
+      color: #fff;
+    }
+
+    .quote p {
+      font-size: 26px;
+      line-height: 1.35;
+      font-weight: 800;
+      max-width: 980px;
+    }
+
+    .quote span {
+      display: block;
+      margin-top: 14px;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .prompt-box {
+      padding: 18px;
+      border: 1px dashed rgba(22, 124, 106, 0.5);
+      border-radius: 16px;
+      background: rgba(223, 242, 234, 0.45);
+      font-size: 15px;
+    }
+
+    @media (max-width: 920px) {
+      .hero,
+      .grid-2,
+      .grid-3,
+      .matrix,
+      .checklist,
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .matrix-col + .matrix-col {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .flow-step::after {
+        display: none;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-note {
+        margin-top: 10px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .page {
+        width: 100%;
+        padding: 0;
+      }
+
+      .hero-main,
+      .hero-side,
+      .section,
+      .card,
+      .quote {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-main">
+        <div class="eyebrow"><span class="dot"></span> 判断型 Skill / For Designers Using Codex</div>
+        <h1>设计师什么时候该用 Codex？</h1>
+        <p class="lead">不是把 Codex 当成“生成结果的机器”，而是把它当成一个能整理混乱材料、提炼判断标准、拆解失败原因、沉淀可执行资产的工作搭子。</p>
+      </div>
+      <aside class="hero-side">
+        <div>
+          <h2 class="side-title">一句话定义</h2>
+          <p>当任务进入“方向判断、素材收束、规则转译、证据验证、流程归档”的阶段，就适合交给 Codex。</p>
+        </div>
+        <ul class="side-list">
+          <li><span class="badge">1</span><span>它适合处理判断链条，不只处理单个结果。</span></li>
+          <li><span class="badge">2</span><span>它适合把审美反馈变成可复用约束。</span></li>
+          <li><span class="badge">3</span><span>它适合把失败样本沉淀成下一轮执行方法。</span></li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>01. 先判断：这件事适不适合交给 Codex？</h2>
+        <p class="section-note">核心不是“Codex 能不能做”，而是“它介入后，能不能减少你的判断负担、整理成本和返工成本”。</p>
+      </div>
+      <div class="matrix">
+        <div class="matrix-col">
+          <div class="matrix-title"><span class="dot"></span> 适合交给 Codex 的任务</div>
+          <ul>
+            <li>素材很多，但方向还没有收束：截图、参考图、对话记录、产品图、网页链接混在一起。</li>
+            <li>你已经有审美反馈，但还没有变成可执行语言：比如“土”“暗”“AI感强”“过年轻”“不够清爽”。</li>
+            <li>需要从多个方案里提炼判断标准：哪个方向更符合人群，哪个方向和旧系列重合。</li>
+            <li>需要查证工具、权限、额度、流程边界：这一步该用 Codex、ChatGPT、浏览器，还是你自己手动做。</li>
+            <li>需要输出成可复用资产：HTML 提示词库、执行表、检查清单、页面结构、归档记忆。</li>
+          </ul>
+        </div>
+        <div class="matrix-col">
+          <div class="matrix-title"><span class="dot"></span> 不适合完全交给 Codex 的任务</div>
+          <ul>
+            <li>最终审美拍板：品牌调性“对不对味”，仍然需要设计师本人判断。</li>
+            <li>大量图片直接生成：当你在意速度、额度、登录稳定性时，Codex 更适合写提示词和质检规则。</li>
+            <li>需要私人账号复杂授权的步骤：比如网页登录、验证码、人工确认等。</li>
+            <li>只靠一句“做高级一点”的任务：如果没有样张、禁区、目标人群，Codex 容易给出泛化结果。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>02. 你给 Codex 的输入，不是资料堆叠，而是判断坐标</h2>
+        <p class="section-note">你越能提供“背景 + 样本 + 禁区 + 输出格式”，Codex 越容易从助手变成策略整理器。</p>
+      </div>
+      <div class="grid-3">
+        <article class="card tint-mint">
+          <h3><span class="pill">A</span> 项目背景</h3>
+          <p>说明产品、平台、页面目标、销售场景、系列关系。</p>
+          <ul>
+            <li>这是什么产品？</li>
+            <li>在哪个平台使用？</li>
+            <li>它和旧系列有什么关系？</li>
+            <li>这次真正要解决的页面问题是什么？</li>
+          </ul>
+        </article>
+        <article class="card tint-blue">
+          <h3><span class="pill">B</span> 样本材料</h3>
+          <p>给 Codex 看成功样本和失败样本，让它反推标准。</p>
+          <ul>
+            <li>参考图：不是照搬，而是提取元素。</li>
+            <li>失败图：指出哪里不对。</li>
+            <li>满意图：说明为什么满意。</li>
+            <li>产品图：保证结构和颜色不跑偏。</li>
+          </ul>
+        </article>
+        <article class="card tint-peach">
+          <h3><span class="pill">C</span> 约束与格式</h3>
+          <p>提前告诉 Codex 什么不能做，以及最终要交付什么。</p>
+          <ul>
+            <li>目标人群和市场。</li>
+            <li>不能靠近的风格。</li>
+            <li>图片比例和页面模块。</li>
+            <li>需要 HTML、表格、提示词库还是归档。</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>03. 你的追问方式：把模糊任务逼成执行系统</h2>
+        <p class="section-note">有效追问不是反复说“再好看一点”，而是一步步把方向、样张、变量和文件化交付压实。</p>
+      </div>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <strong>先问方向</strong>
+          <span>“你对这款壳子的策划方向怎么理解？”先看 Codex 是否理解产品定位、系列差异和人群边界。</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <strong>再给样张</strong>
+          <span>上传满意和不满意的图，不让 Codex凭空想象审美，而是从真实样本里提取规律。</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <strong>拆控制点</strong>
+          <span>把“土、暗、AI、过年轻”拆成穿搭、光线、肤质、场景、动作、构图、产品露出等变量。</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <strong>改执行路径</strong>
+          <span>如果直接生成太慢，就转成提示词库；如果浏览器卡住，就换 Chrome；如果参考图污染，就换参考策略。</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <strong>做成资产</strong>
+          <span>最后沉淀成 HTML、执行表、文件夹、归档记忆，保证下次新窗口也能接上。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>04. 验证 Codex 输出时，看这 8 个点</h2>
+        <p class="section-note">你验证的不是它说得漂不漂亮，而是它有没有真正服务设计决策和后续执行。</p>
+      </div>
+      <div class="checklist">
+        <div class="check">
+          <div class="check-mark">✓</div>
+          <div><strong>是否理解业务定位？</strong><span>有没有把产品和目标人群说准，而不是只说泛泛的高级感。</span></div>
+        </div>
+        <div class="check">
+          <div class="check-mark">✓</div>
+          <div><strong>是否拉开系列差异？</strong><span>有没有避开已经属于其他系列的情绪、色彩、人群和页面语言。</span></div>
+        </div>
+        <div class="check">
+          <div class="check-mark">✓</div>
+          <div><strong>是否能落到页面模块？</strong><span>首屏、轮播、卖点、动画、局部细节是否都有明确用途。</span></div>
+        </div>
+        <div class="check">
+          <div class="check-mark">✓</div>
+          <div><strong>是否能转成执行语言？</strong><span>有没有把审美反馈转成提示词、参考图选择和控制要点。</span></div>
+        </div>
+        <div class="check">
+          <div class="check-mark">✓</div>
+          <div><strong>是否说明不能做什么？</strong><span>禁区越清楚，AI 生成越不容易滑向旧套路。</span></div>
+        </div>
+        <div class="check">
+          <div class="check-mark">✓</div>
+          <div><strong>是否可复制复用？</strong><span>输出最好能直接复制、打开、归档，而不是只停留在聊天里。</span></div>
+        </div>
+        <div class="check">
+          <div class="check-mark">✓</div>
+          <div><strong>是否解释失败原因？</strong><span>不是只说失败，而是指出变量：参考图、肤质、光线、动作、工具路径。</span></div>
+        </div>
+        <div class="check">
+          <div class="check-mark">✓</div>
+          <div><strong>是否给出下一步？</strong><span>好的 Codex 输出会自然导向下一轮执行，而不是让你重新组织任务。</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>05. 失败修正公式：从“不对”到“下一轮更准”</h2>
+        <p class="section-note">设计师使用 Codex 的高阶能力，是把失败样本变成可控变量，而不是把失败当作一次无效尝试。</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3><span class="pill">Step</span> 五步修正</h3>
+          <ul>
+            <li><strong>保留有效部分：</strong>先确认哪些方向是对的，比如场景、动作、构图或生活事件。</li>
+            <li><strong>指出失败表现：</strong>不要只说不好看，要说暗、土、假、太年轻、太像棚拍。</li>
+            <li><strong>收窄变量：</strong>把问题拆成光线、穿搭、人物身份、参考图、产品露出、比例。</li>
+            <li><strong>改变执行路径：</strong>生成不稳就改提示词库，参考图污染就换图或洗图，浏览器卡住就换工具。</li>
+            <li><strong>沉淀成资产：</strong>把修正后的规则写进提示词库、检查清单或项目记忆。</li>
+          </ul>
+        </div>
+        <div class="card tint-mint">
+          <h3><span class="pill">Example</span> 审美反馈怎么转译</h3>
+          <div class="prompt-box">
+            “画面有点土” → 改成：穿搭需要设计感，使用低饱和但有层次的都市轻户外单品，避免廉价旅行感。<br><br>
+            “颜色太暗” → 改成：使用明亮自然日光、清爽夏季阴影，避免深金色黄昏滤镜。<br><br>
+            “AI感太强” → 改成：真实肤质、自然表情、脸不要主导画面、动作像生活中顺手发生。<br><br>
+            “不像官网主视觉” → 改成：需要足够留白、清晰产品露出、页面首屏可承载标题和卖点。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>06. 生图高级感控制卡：不要写“高级”，要控制变量</h2>
+        <p class="section-note">这段经验很适合保存成固定判断规则：高级感不是靠堆 luxury / premium，而是靠场景、身份、配色、动作和产品呈现方式共同控制。</p>
+      </div>
+      <div class="grid-3">
+        <article class="card tint-mint">
+          <h3><span class="pill">Scene</span> 场景降噪</h3>
+          <p>场景越克制，越容易显得真实、有留白、有官网质感。不要写太多热闹元素。</p>
+          <ul>
+            <li>quiet gallery street</li>
+            <li>minimal cafe entrance</li>
+            <li>creator studio</li>
+            <li>refined desk</li>
+            <li>design studio doorway</li>
+          </ul>
+        </article>
+        <article class="card tint-blue">
+          <h3><span class="pill">User</span> 人物身份</h3>
+          <p>不要把人物写成 model、fashion girl、influencer，这些词容易把画面带向棚拍或网红感。</p>
+          <ul>
+            <li>stylish adult creator</li>
+            <li>design-minded user</li>
+            <li>face not dominant</li>
+            <li>real lifestyle content</li>
+            <li>natural presence, not posing</li>
+          </ul>
+        </article>
+        <article class="card tint-peach">
+          <h3><span class="pill">Color</span> 低饱和配色</h3>
+          <p>不是让画面全白，而是让环境和穿搭低饱和，手机壳成为唯一稍亮的视觉点。</p>
+          <ul>
+            <li>cream</li>
+            <li>soft burgundy</li>
+            <li>muted green</li>
+            <li>light denim</li>
+            <li>warm neutral / brushed metal</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="grid-2" style="margin-top: 18px;">
+        <article class="card">
+          <h3><span class="pill">Action</span> 动作要像顺手发生</h3>
+          <p>高级感很怕硬摆拍。动作应该像生活里自然发生，产品在动作里被看见。</p>
+          <ul>
+            <li>checking a message while walking</li>
+            <li>taking a mirror outfit selfie</li>
+            <li>reviewing content on the phone</li>
+            <li>photographing coffee / table details</li>
+            <li>using the Ostand for hands-free content review</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3><span class="pill">Product</span> 产品不要像电商图</h3>
+          <p>产品可以清楚，但要存在于真实材质和真实动作里，避免白底目录图或硬广感。</p>
+          <ul>
+            <li>on a cafe table with soft shadows</li>
+            <li>beside a notebook and iced coffee</li>
+            <li>on a cream knit sleeve</li>
+            <li>real UGC texture, not studio product photography</li>
+            <li>phone case visible within 3 seconds</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="card tint-mint" style="margin-top: 18px;">
+        <h3><span class="pill">Template</span> 可复用高级感生图模板</h3>
+        <div class="prompt-box" style="margin-top: 14px;">
+          Generate a [比例，例如 1:1 / 4:5 / 16:9] photorealistic UGC-style lifestyle image.<br><br>
+          Use the uploaded phone case reference strictly. The image should first feel like refined creator lifestyle / tasteful OOTD content, then subtly like a phone case ad.<br><br>
+          <strong>Scene:</strong><br>
+          A quiet minimal cafe entrance, design studio doorway, gallery-adjacent street, or refined creator workspace in natural daylight. Clean but lived-in, not a studio product shoot.<br><br>
+          <strong>Subject:</strong><br>
+          One stylish adult creator or design-minded user, face not dominant. Outfit in cream, warm neutral, soft burgundy, muted green, light denim, or tailored casual pieces. No visible brand logos.<br><br>
+          <strong>Action:</strong><br>
+          The person is naturally using the phone: checking a message while walking, taking a mirror outfit selfie, reviewing content, or photographing coffee/table details. Avoid stiff standing or obvious modeling poses.<br><br>
+          <strong>Phone case:</strong><br>
+          The phone case should be clearly visible and match the uploaded reference. Keep the structure, colors, camera cutout, side buttons/grip, and stand/ring details accurate. The case should feel coordinated with the outfit, not pasted on.<br><br>
+          <strong>Lighting:</strong><br>
+          Soft natural daylight, gentle shadows, real material texture, slightly imperfect UGC realism.<br><br>
+          <strong>Avoid:</strong><br>
+          poster, infographic, text overlay, fake logos, celebrity likeness, watermark, distorted phone case, wrong colors, distorted hands, extra fingers, product catalog style, studio white background, overly glossy fashion campaign look.
+        </div>
+      </div>
+
+      <div class="quote" style="margin-top: 18px;">
+        <p>高级感 = 低饱和配色 + 安静真实场景 + creator 身份 + 顺手动作 + 产品细节准确。</p>
+        <span>这条规则适合写进所有生活方式类产品生图提示词，尤其适合避免“土、假、棚拍、网红感”。</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>07. 可直接复用的提问模板</h2>
+        <p class="section-note">以后做页面策划、AI 生图、视觉方向、提示词库，都可以用这套句式开局。</p>
+      </div>
+      <div class="grid-2">
+        <div class="card tint-blue">
+          <h3><span class="pill">Brief</span> 给 Codex 的开场</h3>
+          <p class="small">适合你要它先理解项目，而不是直接动手时使用。</p>
+          <div class="prompt-box" style="margin-top: 14px;">
+            我现在有一个设计项目，需要你先帮我判断方向。<br>
+            项目背景是：[产品 / 平台 / 目标页面]。<br>
+            我已有的素材在：[文件夹 / 截图 / 链接]。<br>
+            目前我认为方向可能是：[初步判断]，但你可以反驳。<br>
+            请你不要直接总结素材，而是帮我判断：目标人群、差异化、视觉禁区、页面表达重点，以及后续执行方式。
+          </div>
+        </div>
+        <div class="card tint-peach">
+          <h3><span class="pill">Review</span> 给 Codex 的修正</h3>
+          <p class="small">适合你已经有样张，需要它把反馈变成下一轮规则时使用。</p>
+          <div class="prompt-box" style="margin-top: 14px;">
+            我认可的部分是：[哪里对]。<br>
+            目前不满意的是：[具体问题]。<br>
+            请你不要只说“优化”，而是拆成：场景、人物、穿搭、光线、构图、产品露出、参考图使用、负面约束。<br>
+            最后输出成：[执行表 / 提示词库 / HTML / 检查清单]，方便我下一轮直接使用。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quote">
+      <p>Codex 最适合处理的不是“我要一个结果”，而是“我需要把混乱材料变成判断系统”。</p>
+      <span>设计师保留最终审美判断，Codex 负责把判断过程结构化、执行化、资产化。</span>
+    </section>
+  </main>
+</body>
+</html>
